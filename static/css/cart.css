@@ -1,0 +1,25 @@
+.cart-glass {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(60, 60, 120, 0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(200, 200, 200, 0.18);
+}
+.table thead th {
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  background: rgba(240, 240, 255, 0.7);
+  border-radius: 12px 12px 0 0;
+  color: #3b3b6d;
+}
+.table td,
+.table th {
+  vertical-align: middle;
+}
+.btn-outline-danger {
+  border-radius: 8px;
+}
+.cart-summary {
+  min-width: 220px;
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login | STYLELESS</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M23.6 4c-2.1 0-4.1 1-5.6 2.7C16.5 5 14.5 4 12.4 4 8.4 4 5 7.4 5 11.4c0 7.1 10.1 14.1 10.5 14.4.3.2.7.2 1 0 .4-.3 10.5-7.3 10.5-14.4C27 7.4 23.6 4 23.6 4z' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+
+<body class="admin-auth-body">
+    <div class="admin-auth-container">
+        <div class="admin-auth-card">
+            <div class="admin-auth-brand">
+                <img src="{{ url_for('static', filename='uploads/logo.jpg') }}" alt="Brand Logo"
+                    class="admin-auth-logo">
+                <h1>STYLELESS</h1>
+                <p>Admin Dashboard</p>
+            </div>
+            {% with message = get_flashed_messages() %}
+            {% if message %}
+            <ul class="flash-messages">
+                {% for msg in message %}
+                <li class="alert alert-danger">{{ msg }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            <form class="admin-auth-form" method="post" action="{{ url_for('do_login') }}">
+                <div class="mb-3">
+                    <label for="email" class="form-label">User Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-address-book"></i></span>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="username...."
+                            required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="••••••••"
+                            required>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember">
+                        <label class="form-check-label" for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="admin-auth-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 admin-auth-btn">Log In</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

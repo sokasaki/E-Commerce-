@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | STYLELESS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+
+<body>
+    <div class="d-flex" id="wrapper">
+        {% include 'backend/sidebar.html' %}
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <div class="container-fluid" id="main-content">
+                <!-- Dashboard Header -->
+                <div class="dashboard-header-row">
+                    <button class="mobile-toggle" id="menu-toggle" aria-label="Toggle menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>Reports & Analytics</h2>
+                    <div class="user-info">
+                        <span class="d-none d-md-inline">Welcome, Admin!</span>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" id="dropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user-alt me-2"></i>Profile</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">Total Sales Overview</div>
+                            <div class="card-body text-center">
+                                <h3>$55,200.00 <span class="badge bg-success">+5%</span></h3>
+                                <p class="text-muted">Last 30 Days vs. Previous Period</p>
+                                <div class="bg-light py-5 rounded border d-flex justify-content-center align-items-center"
+                                    style="min-height: 200px;">
+                                    <i class="fas fa-chart-area fa-4x text-muted opacity-50"></i>
+                                    <p class="ms-3 text-muted">Sales Chart Placeholder (e.g., using Chart.js)</p>
+                                </div>
+                                <button class="btn btn-outline-primary mt-3"><i class="fas fa-download me-2"></i>Export
+                                    Sales Data</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">Revenue by Category</div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush mb-3">
+                                    <li class="list-group-item1 d-flex justify-content-between align-items-center">
+                                        Electronics <span class="badge bg-primary rounded-pill">$35,000</span>
+                                    </li>
+                                    <li class="list-group-item1 d-flex justify-content-between align-items-center">
+                                        Accessories <span class="badge bg-primary rounded-pill">$12,000</span>
+                                    </li>
+                                    <li class="list-group-item1 d-flex justify-content-between align-items-center">
+                                        Software <span class="badge bg-primary rounded-pill">$8,200</span>
+                                    </li>
+                                </ul>
+                                <div class="bg-light py-5 rounded border d-flex justify-content-center align-items-center"
+                                    style="min-height: 150px;">
+                                    <i class="fas fa-chart-pie fa-3x text-muted opacity-50"></i>
+                                    <p class="ms-3 text-muted">Category Distribution Chart</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="card">
+                            <div class="card-header">Custom Report Generator</div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label for="reportType" class="form-label">Report Type</label>
+                                            <select class="form-select" id="reportType">
+                                                <option selected>Select...</option>
+                                                <option>Sales by Date</option>
+                                                <option>Orders by Status</option>
+                                                <option>Customer Activity</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="startDate" class="form-label">Start Date</label>
+                                            <input type="date" class="form-control" id="startDate">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="endDate" class="form-label">End Date</label>
+                                            <input type="date" class="form-control" id="endDate">
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mt-3"><i
+                                                    class="fas fa-file-alt me-2"></i>Generate Report</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modals (if needed) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+
+</html>

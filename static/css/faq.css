@@ -1,0 +1,41 @@
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(40, 40, 60, 0.45) 60%,
+    rgba(80, 80, 120, 0.25) 100%
+  );
+  z-index: 1;
+  border-radius: 0 0 24px 24px;
+}
+.faq-glass {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(60, 60, 120, 0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(200, 200, 200, 0.18);
+}
+.accordion-item {
+  background: transparent;
+}
+.accordion-button {
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  background: rgba(240, 240, 255, 0.7);
+  border-radius: 12px !important;
+  box-shadow: none;
+  transition: background 0.2s;
+}
+.accordion-button:not(.collapsed) {
+  background: #e0e7ff;
+  color: #3b3b6d;
+}
+.accordion-body {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 1rem;
+  color: #444;
+  background: transparent;
+  border-radius: 0 0 12px 12px;
+}

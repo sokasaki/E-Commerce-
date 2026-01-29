@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - STYLELESS</title>
+    <!-- Bootstrap 5 CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='final_project/image5.png') }}">
+    <style>
+        body {
+            background: #f8f6f3;
+            font-family: 'Poppins', 'Inter', sans-serif;
+        }
+
+        .account-wrapper {
+            background: #fff;
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 16px rgba(160, 124, 95, 0.08);
+            margin-top: 2rem;
+            padding: 2.5rem 2rem;
+        }
+
+        .sidebar {
+            background: #faf9f7;
+            border-radius: 1rem;
+            padding: 2rem 1.5rem;
+            min-width: 220px;
+            max-width: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sidebar .welcome {
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            transition: background 0.2s;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background: #e7dfd7;
+            color: #a07c5f;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 0.75em;
+        }
+
+        .orders-section {
+            padding-left: 2rem;
+        }
+
+        .orders-section h3 {
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .order-card {
+            background: #fff;
+            border: 1px solid #e7dfd7;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: 0 2px 8px rgba(160, 124, 95, 0.05);
+        }
+
+        .order-images {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .order-images img {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            border: 1px solid #e7dfd7;
+        }
+
+        .order-info {
+            flex: 1;
+        }
+
+        .order-info .row {
+            margin-bottom: 0.5rem;
+        }
+
+        .order-status {
+            font-weight: 600;
+        }
+
+        .order-status.delivered {
+            color: #28a745;
+        }
+
+        .order-status.pending {
+            color: #ffc107;
+        }
+
+        .order-status.processing {
+            color: #a07c5f;
+        }
+
+        .order-status.cancel {
+            color: #dc3545;
+        }
+
+        .order-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .order-actions .btn {
+            border-radius: 2rem;
+            font-weight: 500;
+            padding: 0.5em 1.5em;
+            border: 1px solid #a07c5f;
+            color: #a07c5f;
+            background: #fff;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .order-actions .btn:hover {
+            background: #a07c5f;
+            color: #fff;
+        }
+
+        @media (max-width: 991px) {
+            .account-wrapper {
+                padding: 1rem;
+            }
+
+            .orders-section {
+                padding-left: 0;
+                margin-top: 2rem;
+            }
+
+            .order-card {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .sidebar {
+                min-width: 100%;
+                max-width: 100%;
+                margin-bottom: 2rem;
+                padding: 1.5rem 1rem;
+                align-items: center;
+            }
+
+            .sidebar .nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                justify-content: center;
+            }
+
+            .sidebar .nav-link {
+                flex: 1 1 45%;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .sidebar {
+                padding: 1rem 0.5rem;
+            }
+
+            .sidebar .nav-link {
+                font-size: 0.95rem;
+                padding: 0.5rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'front/header.html' %}
+    <!-- Main Content -->
+    <div class="container account-wrapper" style="margin-top:100px;">
+        <h2>My Account</h2>
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 col-md-5 mb-4 mb-lg-0">
+                <div class="sidebar">
+                    <div class="welcome mb-4">Welcome, John Doe</div>
+                    <nav class="nav">
+                        <a class="nav-link active" href="#"><i class="fa fa-box"></i> Orders</a>
+                        <a class="nav-link" href="#"><i class="fa fa-heart"></i> Favorites</a>
+                        <a class="nav-link" href="#"><i class="fa fa-user"></i> Personal data</a>
+                        <a class="nav-link" href="#"><i class="fa fa-lock"></i> Change password</a>
+                        <a class="nav-link" href="#"><i class="fa fa-home"></i> Addresses</a>
+                        <a class="nav-link" href="#"><i class="fa fa-sign-out-alt"></i> Sign out</a>
+                    </nav>
+                </div>
+            </div>
+            <!-- Orders Section -->
+            <div class="col-lg-9 col-md-7 orders-section">
+                <h3>Orders</h3>
+                <!-- Orders will be dynamically rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="orderDetailsContent">
+                    <!-- Order details will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="container-fluid py-4 footer-bg mt-5">
+        <div class="container text-center">
+            <p class="text-muted small mb-0" style="color:#fff !important;">&copy; 2025 STYLELESS. All rights reserved.
+            </p>
+        </div>
+    </footer>
+    <!-- Bootstrap 5 JS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <!-- Your custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script>
+        // Load orders from localStorage
+        function loadOrders() {
+            return JSON.parse(localStorage.getItem('orders')) || [];
+        }
+
+        // Function to render orders dynamically
+        function renderOrders() {
+            const ordersSection = document.querySelector('.orders-section');
+            const h3 = ordersSection.querySelector('h3');
+            const orders = loadOrders();
+
+            // Clear existing orders
+            ordersSection.innerHTML = '';
+            ordersSection.appendChild(h3);
+
+            if (orders.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'text-center py-5';
+                emptyMessage.innerHTML = '<p class="text-muted">No orders yet. <a href="{{ url_for("shop") }}">Start shopping!</a></p>';
+                ordersSection.appendChild(emptyMessage);
+                return;
+            }
+
+            orders.forEach(order => {
+                const orderDate = new Date(order.date);
+                const formattedDate = orderDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                const orderCard = document.createElement('div');
+                orderCard.className = 'order-card';
+
+                let imagesHtml = '';
+                if (order.items && order.items.length > 0) {
+                    const maxImages = Math.min(3, order.items.length);
+                    for (let i = 0; i < maxImages; i++) {
+                        imagesHtml += `<img src="${order.items[i].image}" alt="${order.items[i].title}">`;
+                    }
+                    if (order.items.length > 3) {
+                        imagesHtml += `<span class="ms-2">+${order.items.length - 3} more</span>`;
+                    }
+                }
+
+                let actionsHtml = `<button class="btn" onclick="viewOrderDetails('${order.id}')">VIEW ORDER</button>`;
+
+                orderCard.innerHTML = `
+                    <div class="row w-100">
+                        <div class="col-12 mb-3">
+                            <div class="order-images">
+                                ${imagesHtml}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="order-info">
+                                <div class="row">
+                                    <div class="col-6 col-md-3"><strong>Order number</strong><br>#${order.id}</div>
+                                    <div class="col-6 col-md-3"><strong>Order date</strong><br>${formattedDate}</div>
+                                    <div class="col-6 col-md-3"><strong>Total</strong><br>$${order.total.toFixed(2)}</div>
+                                    <div class="col-6 col-md-3"><strong>Status</strong><br><span class="order-status ${order.status.toLowerCase()}">${order.status}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <div class="order-actions">
+                                ${actionsHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                ordersSection.appendChild(orderCard);
+            });
+        }
+
+        // View order details function
+        function viewOrderDetails(orderId) {
+            const orders = loadOrders();
+            const order = orders.find(o => o.id == orderId);
+            if (!order) return;
+
+            const orderDate = new Date(order.date).toLocaleString();
+
+            let itemsHtml = '';
+            order.items.forEach(item => {
+                const itemTotal = (item.price * (item.quantity || 1)).toFixed(2);
+                itemsHtml += `
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="${item.image}" alt="${item.title}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 0.5rem; margin-right: 1rem;">
+                                <div>
+                                    <strong>${item.title}</strong><br>
+                                    <small class="text-muted">Size: ${item.size || 'N/A'} | Color: ${item.color || 'N/A'}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">${item.quantity || 1}</td>
+                        <td class="text-end">$${item.price.toFixed(2)}</td>
+                        <td class="text-end">$${itemTotal}</td>
+                    </tr>
+                `;
+            });
+
+            const modalContent = `
+                <div class="mb-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Order Number</h6>
+                            <p class="fw-bold">#${order.id}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Order Date</h6>
+                            <p class="fw-bold">${orderDate}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Status</h6>
+                            <p class="fw-bold"><span class="order-status ${order.status.toLowerCase()}">${order.status}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Payment Method</h6>
+                            <p class="fw-bold">${order.paymentMethod}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-muted mb-3">Customer Information</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong> ${order.customerInfo.firstName} ${order.customerInfo.lastName}</p>
+                            <p><strong>Email:</strong> ${order.customerInfo.email}</p>
+                            <p><strong>Phone:</strong> ${order.customerInfo.phone}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Shipping Address:</strong></p>
+                            <p>${order.customerInfo.address}<br>
+                            ${order.customerInfo.city}, ${order.customerInfo.state} ${order.customerInfo.zip}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-muted mb-3">Order Items</h6>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-end">Price</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 ms-auto">
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Subtotal:</strong></td>
+                                <td class="text-end">$${order.subtotal.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Shipping:</strong></td>
+                                <td class="text-end">$${order.shipping.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tax:</strong></td>
+                                <td class="text-end">$${order.tax.toFixed(2)}</td>
+                            </tr>
+                            <tr class="table-active">
+                                <td><strong>Total:</strong></td>
+                                <td class="text-end"><strong>$${order.total.toFixed(2)}</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('orderDetailsContent').innerHTML = modalContent;
+            const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+            modal.show();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            renderOrders();
+        });
+    </script>
+</body>
+
+</html>

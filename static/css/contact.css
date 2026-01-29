@@ -1,0 +1,79 @@
+/* Glassmorphism card for contact form */
+.contact-glass {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(60, 60, 120, 0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(200, 200, 200, 0.18);
+}
+
+/* Banner overlay for readability */
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(40, 40, 60, 0.45) 60%,
+    rgba(80, 80, 120, 0.25) 100%
+  );
+  z-index: 1;
+  border-radius: 0 0 24px 24px;
+}
+
+/* Icon circles for info and social */
+.icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(240, 240, 255, 0.7);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  font-size: 1.3rem;
+  transition: background 0.2s;
+  color: #3b3b6d;
+}
+.icon-circle:hover {
+  background: #e0e7ff;
+  color: #0d6efd;
+}
+
+/* Headings and body font */
+body,
+.form-control,
+.text-muted,
+.lead {
+  font-family: "Inter", Arial, sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand,
+.fw-bold {
+  font-family: "permanent marker", sans-serif; /* Custom font for brand */
+  font-weight: 400;
+  font-style: normal; /* Larger brand name */
+}
+
+/* Button style */
+.btn-primary {
+  background: linear-gradient(90deg, #3b3b6d 0%, #0d6efd 100%);
+  border: none;
+  border-radius: 12px;
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(60, 60, 120, 0.08);
+}
+.btn-primary:hover {
+  background: linear-gradient(90deg, #0d6efd 0%, #3b3b6d 100%);
+}
+
+/* Card shadow for info */
+.card.contact-glass {
+  box-shadow: 0 4px 24px rgba(60, 60, 120, 0.1);
+}

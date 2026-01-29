@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product | STYLELESS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+
+<body>
+    <div class="d-flex" id="wrapper">
+        {% include 'backend/sidebar.html' %}
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid" id="main-content">
+                <!-- Dashboard Header -->
+                <div class="dashboard-header-row">
+                    <button class="mobile-toggle" id="menu-toggle" aria-label="Toggle menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>Edit Category</h2>
+                    <div class="user-info">
+                        <span class="d-none d-md-inline">Welcome, Admin!</span>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" id="dropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user-alt me-2"></i>Profile</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Product Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-plus me-2"></i>Edit Category</span>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('editCategory_page',category_id=category.id) }}"
+                            enctype="multipart/form-data">
+                            <input type="hidden" name="category_id" value="{{ category.id }}" />
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Category Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="{{ category.name }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="description" class="form-label">Description <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="description" name="description"
+                                        value="{{ category.description }}" required>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 ">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Update Category
+                                </button>
+                                <a href="{{ url_for('category') }}" class="btn btn-secondary">
+                                    <i class="fas fa-times me-2"></i>Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,722 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bungee+Spice&family=DynaPuff:wght@400..700&family=Edu+AU+VIC+WA+NT+Guides:wght@400..700&family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Pacifico&family=Permanent+Marker&family=Petrona:ital,wght@0,100..900;1,100..900&family=Sacramento&display=swap");
+:root {
+  --primary-color: #4a2c5d; /* Deep Plum */
+  --accent-color: #a07c5f; /* Muted Terracotta */
+  --bg-light: #f8f9fa; /* Off-white for general background */
+  --text-dark: #343a40; /* Dark gray for main text */
+  --text-muted: #6c757d; /* Muted gray for secondary text */
+  --border-color: #e0e0e0; /* Light gray for borders */
+  --footer-bg: #eaeaea; /* Slightly darker light gray for footer */
+  --subscribe-bg: #2c2c2c; /* Dark background for subscribe section */
+  --copyright-bg: #1a1a1a; /* Even darker for copyright bar */
+}
+
+/* Base and Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: var(--text-dark);
+  background-color: var(--bg-light);
+  line-height: 1.6; /* Improved readability */
+  font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+a {
+  text-decoration: none; /* Remove default underline from all links */
+  color: inherit; /* Inherit color by default unless specified */
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Inter", sans-serif;
+
+  color: var(--primary-color); /* Headings in primary color */
+}
+.navbar-brand {
+  font-family: "permanent marker", sans-serif; /* Custom font for brand */
+  font-weight: 400;
+  font-style: normal; /* Larger brand name */
+}
+.dropdown-toggle::after {
+  display: none; /* Remove default arrow */
+}
+.navbar-brand {
+  font-weight: 700 !important;
+  font-size: 2.2rem !important; /* Larger brand name */
+}
+
+/* Navbar specific styles */
+#mainNavbar {
+  background-color: var(--bg-light); /* Ensure initial background is light */
+  transition: all 0.3s ease-in-out;
+  box-shadow: none; /* Initial state without shadow */
+  z-index: 1030; /* Ensure navbar is above other content */
+}
+
+#mainNavbar.scrolled {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Shadow when scrolled */
+  background-color: var(
+    --bg-light
+  ); /* Maintain solid background when scrolled */
+}
+
+.taga {
+  /* Navigation links */
+  color: var(
+    --text-dark
+  ) !important; /* Use important to override bootstrap default */
+  font-weight: 500;
+  transition: color 0.3s ease;
+  padding: 0.5rem 1rem; /* Better clickable area */
+}
+.taga:hover {
+  color: var(--accent-color) !important;
+}
+.navbar-nav .nav-link i {
+  /* Icons in nav */
+  color: var(--text-dark);
+  transition: color 0.3s ease;
+}
+.navbar-nav .nav-link:hover i {
+  color: var(--accent-color);
+}
+.navbar-nav .nav-link.active {
+  /* Active state for current page */
+  color: var(--primary-color) !important;
+  font-weight: 600;
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for dropdown */
+  border-radius: 0.5rem;
+}
+.dropdown-item {
+  color: var(--text-dark);
+  font-weight: 400;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--primary-color);
+  color: #fff; /* White text on hover */
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  transition: all 0.3s ease;
+  padding: 0.75rem 1.5rem; /* Larger touch targets */
+  border-radius: 0.5rem; /* Slightly rounded */
+}
+.btn-primary:hover {
+  background-color: #3e244b; /* Darker plum */
+  border-color: #3e244b;
+  transform: translateY(-2px); /* Subtle lift */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.btn-outline-dark {
+  border-color: var(--text-dark);
+  color: var(--text-dark);
+  transition: all 0.3s ease;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+}
+.btn-outline-dark:hover {
+  background-color: var(--text-dark);
+  color: var(--bg-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.btn-light {
+  /* For buttons on image overlays */
+  background-color: #fff;
+  color: var(--text-dark);
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+.btn-light:hover {
+  background-color: var(--bg-light);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.btn-dark {
+  /* For "View All Products" */
+  background-color: var(--text-dark);
+  border-color: var(--text-dark);
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+.btn-dark:hover {
+  background-color: #4a4f54; /* Lighter dark */
+  border-color: #4a4f54;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* NEW: Main Banner Section on Homepage */
+.banner-main-bg {
+  /* Path adjusted for style.css being in 'css/' folder */
+  background: url("../final_project/banner-1.jpg") center center/cover no-repeat;
+  min-height: 70vh; /* Make it tall enough */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  margin-top: 5rem; /* Space below fixed navbar */
+  position: relative;
+}
+.banner-main-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(126, 123, 123, 0.4); /* dark overlay, adjust as needed */
+  z-index: 1;
+}
+.banner-main-bg > .container {
+  position: relative;
+  z-index: 2;
+}
+.banner-main-bg .display-1 {
+  font-size: 4.5rem;
+  line-height: 1.1;
+}
+.banner-main-bg .lead {
+  font-size: 1.4rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* NEW: Shop Banner Section (for shop.html) */
+.shop-banner-bg {
+  background: url("../final_project/banner-2.jpg") center center/cover no-repeat;
+  position: relative;
+  min-height: 60vh; /* Increase this value for more height */
+  display: flex;
+  align-items: center;
+}
+.shop-banner-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); /* Optional: white overlay for readability */
+  z-index: 1;
+}
+.shop-banner-bg > .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Card Styles */
+.card {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft shadow */
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%; /* Ensure cards in grid have equal height */
+  display: flex;
+  flex-direction: column;
+  position: relative; /* For positioning badges */
+}
+.card:hover {
+  transform: translateY(-5px); /* Lift card on hover */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Stronger shadow on hover */
+}
+.card-img {
+  /* For background images in overlay cards */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the entire area */
+}
+.card-img-overlay {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.4
+  ); /* Darker overlay for better text contrast */
+  border-radius: 0.75rem; /* Match card border-radius */
+  transition: background-color 0.3s ease;
+  display: flex; /* Ensure flex properties apply */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem; /* Add padding to overlay content */
+}
+.card:hover .card-img-overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* Slightly darker on hover */
+}
+.card-img-overlay .btn {
+  opacity: 0; /* Hide button initially */
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.card:hover .card-img-overlay .btn {
+  opacity: 1; /* Show button on hover */
+  transform: translateY(0);
+}
+
+/* NEW: Card Overlay Hover effect specifically for category cards on index.html */
+.card-overlay-hover .card-img {
+  filter: brightness(0.7); /* Slightly dim the image */
+  transition: filter 0.3s ease;
+}
+.card-overlay-hover:hover .card-img {
+  filter: brightness(0.5); /* Dim more on hover */
+}
+.card-overlay-hover .card-img-overlay {
+  opacity: 0; /* Hide overlay initially */
+  transition: opacity 0.3s ease;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.6
+  ); /* Ensure solid background for overlay text */
+}
+.card-overlay-hover:hover .card-img-overlay {
+  opacity: 1; /* Show overlay on hover */
+}
+.card-overlay-hover .card-img-overlay .card-title,
+.card-overlay-hover .card-img-overlay .card-text,
+.card-overlay-hover .card-img-overlay .btn {
+  color: #fff; /* Ensure text and button are white */
+}
+
+.card-img-top {
+  /* For product images, ensure they fit */
+  width: 100%;
+  height: 200px; /* Fixed height for product images */
+  object-fit: cover;
+  border-top-left-radius: calc(0.75rem - 1px); /* Match card radius */
+  border-top-right-radius: calc(0.75rem - 1px);
+}
+.card-body {
+  flex-grow: 1; /* Allow body to take available space */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Push price and button to bottom */
+  padding: 1.25rem;
+}
+.product-card .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.product-card .card-text.price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-top: auto; /* Push price down */
+  margin-bottom: 1rem;
+}
+.product-card .add-to-cart-btn {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  background-color: var(--accent-color); /* Use accent color for add to cart */
+  border-color: var(--accent-color);
+}
+.product-card .add-to-cart-btn:hover {
+  background-color: #8b6b55; /* Darker accent */
+  border-color: #8b6b55;
+}
+.product-card:hover .add-to-cart-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Product Badges */
+.product-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  z-index: 5; /* Ensure it's above the image */
+}
+
+.new-badge {
+  background-color: #28a745; /* Green for new */
+}
+
+.sale-badge {
+  background-color: #dc3545; /* Red for sale */
+}
+
+/* Ship Section (Features) */
+.ship {
+  background-color: #fff; /* White background for this section */
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); /* Lighter shadow */
+}
+
+.icon-circle {
+  /* Renamed from .a to be more descriptive */
+  width: 70px;
+  height: 70px;
+  background-color: var(--bg-light) !important; /* Force light background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color); /* Subtle border */
+  transition: background-color 0.3s ease;
+}
+.icon-circle i {
+  color: var(--primary-color); /* Icons in primary color */
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.icon-circle:hover {
+  background-color: var(--accent-color) !important;
+}
+.icon-circle:hover i {
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* Product Listing Section (for shop.html and featured on index.html) */
+.product-section-bg,
+.bg-light {
+  /* Reusing bg-light for featured products on index.html */
+  background-color: var(--bg-light);
+}
+
+/* Sidebar styles (mostly for shop.html) */
+.sidebar {
+  position: sticky; /* Makes the sidebar stick when scrolling */
+  top: 100px; /* Adjust this value based on your fixed navbar height + desired offset */
+  height: fit-content; /* Ensure it only takes up necessary height */
+  margin-bottom: 1.5rem; /* Space below sidebar on small screens */
+}
+
+/* Breadcrumbs (mostly for shop.html) */
+.shop-breadcrumb .breadcrumb-item a {
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+.shop-breadcrumb .breadcrumb-item a:hover {
+  color: var(--primary-color);
+}
+.shop-breadcrumb .breadcrumb-item.active {
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+/* Sort By dropdown (mostly for shop.html) */
+#sortSelect {
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  background-color: #fff;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  box-shadow: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+#sortSelect:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.25rem rgba(160, 124, 95, 0.25);
+}
+
+/* Subscribe Section */
+.subscribe-bg {
+  background-color: var(--subscribe-bg);
+}
+.sub p {
+  color: #fff;
+}
+.sub .text-opacity-75 {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+.sub .fs-2 {
+  color: #fff !important;
+}
+.sub .text-danger {
+  color: var(--accent-color) !important;
+}
+.input-group .form-control {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  border: none;
+  padding: 0.75rem 1rem;
+}
+.input-group .btn-primary {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  z-index: 2;
+}
+
+/* Footer */
+.footer-bg {
+  background-color: var(--footer-bg);
+}
+.footer-bg h2 {
+  color: var(--primary-color);
+}
+.footer-bg ul li a {
+  color: var(--text-dark) !important;
+  transition: color 0.2s ease;
+}
+.footer-bg ul li a:hover {
+  color: var(--accent-color) !important;
+}
+
+.copyright-bg {
+  background-color: var(--copyright-bg);
+  color: #fff;
+}
+.copyright-bg h5 {
+  color: #fff;
+}
+.copyright-bg .social a {
+  color: #fff !important;
+  margin-right: 15px;
+  transition: color 0.2s ease;
+}
+.copyright-bg .social a:last-child {
+  margin-right: 0;
+}
+.copyright-bg .social a:hover {
+  color: var(--accent-color) !important;
+}
+
+/* Offcanvas Cart Specifics */
+.offcanvas-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+  padding: 1.5rem;
+}
+.offcanvas-title {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-size: 1.8rem;
+}
+.offcanvas-footer {
+  border-top: 1px solid var(--border-color);
+  padding: 1rem 1.5rem;
+}
+
+/* Cart Item styles (for JS generated content) */
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 15px;
+}
+.cart-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+.cart-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-right: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+.cart-item-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.cart-item-title {
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+}
+.cart-item-price {
+  font-weight: 700;
+  color: var(--accent-color);
+  font-size: 1rem;
+}
+.cart-item-remove {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.cart-item-remove:hover {
+  color: var(--primary-color);
+}
+
+/* Forms */
+.form-control,
+.form-select {
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.25rem rgba(160, 124, 95, 0.25);
+}
+
+/* Media Queries for fine-tuning responsiveness */
+@media (max-width: 991.98px) {
+  /* Adjust breakpoint for sidebar stacking */
+  .navbar-collapse {
+    text-align: center;
+    background-color: var(--bg-light);
+    padding-bottom: 1rem;
+    border-radius: 0 0 0.75rem 0.75rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+  .navbar-nav .nav-item {
+    margin-right: 0 !important;
+    margin-bottom: 0.5rem;
+  }
+  .navbar-nav .nav-link {
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+  }
+  .banner-main-bg {
+    min-height: 50vh;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  .banner-main-bg .display-1 {
+    font-size: 3rem;
+  }
+  .banner-main-bg .lead {
+    font-size: 1.1rem;
+  }
+  .slide .col-md-6, /* Renamed to .container > .row:first-child .col-md-6 */
+    .ship .col-md-4,
+    .subscribe-bg .col-md-5,
+    footer .col-md-3 {
+    margin-bottom: 1.5rem !important;
+  }
+  .subscribe-bg .sub p {
+    padding-top: 1rem !important;
+  }
+  .subscribe-bg .sub .fs-1 {
+    font-size: 2.2rem !important;
+  }
+  .subscribe-bg .sub .fs-2 {
+    font-size: 1.8rem !important;
+  }
+  .offcanvas-footer .d-grid .btn {
+    width: 100%;
+  }
+  .input-group {
+    width: 90% !important;
+  }
+  .sidebar {
+    /* Remove sticky on small screens */
+    position: static;
+    top: auto;
+    margin-bottom: 2rem; /* Add more space before products on mobile */
+  }
+  .product-section-bg .container .row.g-4 {
+    flex-direction: column; /* Force columns to stack */
+  }
+  .product-section-bg .col-lg-3,
+  .product-section-bg .col-lg-9 {
+    width: 100%; /* Take full width on small screens */
+    max-width: 100%;
+  }
+  .product-section-bg .col-lg-9 h1 {
+    /* "Shop Now" heading */
+    text-align: center;
+    margin-top: 1.5rem; /* Add space if sidebar is above */
+  }
+
+  /* Adjust sort select on small screens */
+  .d-flex.justify-content-end.align-items-center.mb-4 {
+    justify-content: center !important;
+  }
+}
+
+/* NEW STYLES FROM CODE CHANGE */
+.page-banner {
+  background: url("../final_project/banner-2.jpg") center center/cover no-repeat;
+  min-height: 40vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.page-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+.page-banner .container {
+  position: relative;
+  z-index: 2;
+}
+.card {
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+}
+.team-member-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.faq-section .accordion-button {
+  font-weight: bold;
+  color: #222;
+}
+.faq-section .accordion-button:not(.collapsed) {
+  background: #f8f9fa;
+  color: #007bff;
+}
+.contact-info i,
+.social i {
+  color: #007bff;
+}
+.card-body .list-group {
+  margin-bottom: 0.5rem !important;
+}
+.card-body .list-group-item {
+  margin-bottom: 0 !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+.card-body .d-flex {
+  margin-bottom: 0.5rem !important;
+}
+.card-body hr {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}

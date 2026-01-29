@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - STYLELESS</title>
+    <!-- Bootstrap 5 CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='final_project/image5.png') }}">
+</head>
+
+<body>
+    <!-- Header (reuse your main navbar if needed) -->
+    {% include 'front/header.html' %}
+
+    <!-- Checkout Banner -->
+    <!-- <div class="container-fluid shop-banner-bg py-5 mt-5">
+        <div class="container text-center py-5">
+            <h1 class="display-4 fw-bold text-white mb-4">Checkout</h1>
+            <p class="lead text-white-50 mb-4">Complete your order and get ready to unleash your style!</p>
+        </div>
+    </div> -->
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="successModalLabel">
+                        <i class="fa fa-check-circle me-2"></i>Order Placed Successfully!
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <div class="mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
+                            class="bi bi-check-circle text-success" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            <path
+                                d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
+                        </svg>
+                    </div>
+                    <h4 class="mb-3">Thank You for Your Order!</h4>
+                    <p class="text-muted mb-0">Your order has been successfully placed.</p>
+                    <p class="text-muted">You will receive a confirmation email shortly.</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <a href="{{ url_for('shop') }}" class="btn btn-primary">Continue Shopping</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Form & Order Summary -->
+    <div class="container py-5" style="margin-top: 50px;">
+        <div class="row g-5">
+            <!-- Order Summary -->
+            <div class="col-lg-5 order-lg-2">
+                <div class="row">
+                    <div class="card shadow-sm ">
+                        <div class="card-header bg-light fw-bold">Order Summary</div>
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4 text-center">Your Order</h5>
+
+                            <!-- Empty cart message -->
+                            <div id="emptyCheckoutMessage" class="text-center py-4 d-none">
+                                <p class="text-muted">Your cart is empty.</p>
+                                <a href="{{ url_for('shop') }}" class="btn btn-primary mt-2">Go Shopping</a>
+                            </div>
+
+                            <!-- Order items container -->
+                            <div id="orderItemsContainer">
+                                <div class="order-items mb-3" id="checkoutOrderItems">
+                                    <!-- Items will be dynamically inserted here -->
+                                </div>
+                                <div class="order-totals">
+                                    <div class="d-flex justify-content-between align-items-center py-2">
+                                        <span class="fw-semibold">Subtotal</span>
+                                        <span class="fw-bold" id="checkoutSubtotal">$0.00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center py-2">
+                                        <span>Shipping</span>
+                                        <span id="checkoutShipping">$5.00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center py-2">
+                                        <span>Tax</span>
+                                        <span id="checkoutTax">$2.00</span>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between align-items-center py-2">
+                                        <span class="fs-5 fw-bold text-dark">Total</span>
+                                        <span class="fs-5 fw-bold text-primary" id="checkoutTotal">$0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Checkout Form -->
+            <div class="col-lg-7 order-lg-1">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light fw-bold">Shipping & Payment</div>
+                    <div class="card-body">
+                        <form>
+                            <h5 class="mb-3 fw-bold">Shipping Information</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" required>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="city" class="form-label">City</label>
+                                    <input type="text" class="form-control" id="city" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="zip" class="form-label">ZIP Code</label>
+                                    <input type="text" class="form-control" id="zip" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="country" class="form-label">Country</label>
+                                <select class="form-select" id="country" required>
+                                    <option value="">Select Country</option>
+                                    <option value="us">United States</option>
+                                    <option value="uk">United Kingdom</option>
+                                    <option value="th">Thailand</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <hr>
+                            <h5 class="mb-3 fw-bold">Payment Method</h5>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard"
+                                        checked>
+                                    <label class="form-check-label" for="creditCard">
+                                        Credit Card
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paypal">
+                                    <label class="form-check-label" for="paypal">
+                                        PayPal
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="cod">
+                                    <label class="form-check-label" for="cod">
+                                        Cash on Delivery
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cardNumber" class="form-label">Card Number</label>
+                                <input type="text" class="form-control" id="cardNumber" required>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="cardExpiry" class="form-label">Expiry Date</label>
+                                    <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY"
+                                        required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cardCVC" class="form-label">CVC</label>
+                                    <input type="text" class="form-control" id="cardCVC" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-2 mt-3">Place Order</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <!-- Your custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script>
+        // Function to render checkout order summary
+        function renderCheckoutSummary() {
+            const orderItemsDiv = document.getElementById('checkoutOrderItems');
+            const emptyMessage = document.getElementById('emptyCheckoutMessage');
+            const orderContainer = document.getElementById('orderItemsContainer');
+
+            if (!cart || cart.length === 0) {
+                emptyMessage.classList.remove('d-none');
+                orderContainer.classList.add('d-none');
+                return;
+            }
+
+            emptyMessage.classList.add('d-none');
+            orderContainer.classList.remove('d-none');
+
+            let itemsHtml = '';
+            let subtotal = 0;
+
+            cart.forEach((item) => {
+                const quantity = item.quantity || 1;
+                const itemTotal = item.price * quantity;
+                subtotal += itemTotal;
+
+                itemsHtml += `
+                    <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                        <img src="${item.image}" alt="${item.title}"
+                            style="width:56px; height:56px; object-fit:cover; border-radius:10px; margin-right:16px;">
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">${item.title}</div>
+                            <div class="text-muted small">Qty: ${quantity}</div>
+                        </div>
+                        <div class="fw-bold fs-6">$${itemTotal.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+
+            orderItemsDiv.innerHTML = itemsHtml;
+
+            // Update totals
+            const shipping = subtotal > 0 ? 5.00 : 0;
+            const tax = subtotal > 0 ? 2.00 : 0;
+            const total = subtotal + shipping + tax;
+
+            document.getElementById('checkoutSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('checkoutShipping').textContent = `$${shipping.toFixed(2)}`;
+            document.getElementById('checkoutTax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('checkoutTotal').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            renderCheckoutSummary();
+
+            // Handle form submission
+            const checkoutForm = document.querySelector('form');
+            checkoutForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Validate form
+                if (checkoutForm.checkValidity()) {
+                    // Calculate totals
+                    const subtotal = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+                    const shipping = 5.00;
+                    const tax = 2.00;
+                    const total = subtotal + shipping + tax;
+
+                    // Create order object
+                    const orderData = {
+                        id: Date.now(),
+                        date: new Date().toISOString(),
+                        items: [...cart],
+                        customerInfo: {
+                            firstName: document.getElementById('firstName').value,
+                            lastName: document.getElementById('lastName').value,
+                            email: document.getElementById('email').value,
+                            phone: document.getElementById('phone').value,
+                            address: document.getElementById('address').value,
+                            city: document.getElementById('city').value,
+                            zip: document.getElementById('zip').value,
+                            country: document.getElementById('country').value
+                        },
+                        paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').id,
+                        subtotal: subtotal,
+                        shipping: shipping,
+                        tax: tax,
+                        total: total,
+                        status: 'Processing'
+                    };
+
+                    // Save order to localStorage
+                    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                    orders.unshift(orderData); // Add to beginning
+                    localStorage.setItem('orders', JSON.stringify(orders));
+
+                    // Show success modal
+                    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                    successModal.show();
+
+                    // Clear cart after showing modal
+                    cart = [];
+                    saveCart();
+
+                    // Reset form
+                    checkoutForm.reset();
+
+                    // Update displays
+                    renderCheckoutSummary();
+                    displayCart();
+                } else {
+                    // Show validation errors
+                    checkoutForm.classList.add('was-validated');
+                }
+            });
+        });
+    </script>
+
+    <!-- Footer (reuse your main footer if needed) -->
+    {% include 'front/footer.html' %}
+</body>
+
+</html>

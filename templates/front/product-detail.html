@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Hoodie - STYLELESS</title>
+    {#
+    <link rel="stylesheet" href="../bootstrap-5.0.2-dist/css/bootstrap.css">#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='final_project/image5.png') }}">
+    <style>
+        body {
+            background: #f8f6f3;
+            font-family: 'Poppins', 'Inter', sans-serif;
+        }
+
+        .product-detail-wrapper {
+            background: #fff;
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 16px rgba(160, 124, 95, 0.08);
+            margin-top: 100px;
+            padding: 2.5rem 2rem;
+        }
+
+        .product-images {
+            position: sticky;
+            top: 120px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 1rem;
+            border: 1px solid #e7dfd7;
+            margin-bottom: 1rem;
+        }
+
+        .thumbnail-images {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: #a07c5f;
+        }
+
+        .product-info {
+            padding-left: 2rem;
+        }
+
+        .product-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #a07c5f;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .size-selector {
+            margin-bottom: 2rem;
+        }
+
+        .size-option {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 2px solid #e7dfd7;
+            border-radius: 0.5rem;
+            text-align: center;
+            line-height: 46px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .size-option:hover,
+        .size-option.selected {
+            border-color: #a07c5f;
+            background: #a07c5f;
+            color: #fff;
+        }
+
+        .color-selector {
+            margin-bottom: 2rem;
+        }
+
+        .color-option {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .color-option.selected {
+            border-color: #a07c5f;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #a07c5f;
+            background: #fff;
+            color: #a07c5f;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quantity-btn:hover {
+            background: #a07c5f;
+            color: #fff;
+        }
+
+        .quantity-input {
+            width: 60px;
+            height: 40px;
+            text-align: center;
+            border: 1px solid #e7dfd7;
+            margin: 0 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .btn-add-cart {
+            background: #a07c5f;
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .btn-add-cart:hover {
+            background: #8a6b4f;
+        }
+
+        .btn-wishlist {
+            border: 1px solid #a07c5f;
+            color: #a07c5f;
+            background: #fff;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn-wishlist:hover {
+            background: #a07c5f;
+            color: #fff;
+        }
+
+        .product-features {
+            border-top: 1px solid #e7dfd7;
+            padding-top: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: #f3ede7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: #a07c5f;
+        }
+
+        @media (max-width: 991px) {
+            .product-detail-wrapper {
+                padding: 1rem;
+                margin-top: 80px;
+            }
+
+            .product-info {
+                padding-left: 0;
+                margin-top: 2rem;
+            }
+
+            .product-images {
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'front/header.html' %}
+
+    {# ensure `product` always defined and build an images list with sensible fallback #}
+    {% set product = product or {} %}
+    {% set images = product.get('images') if product.get('images') else ([product.get('image')] if product.get('image')
+    else [url_for('static', filename='final_project/Men/hoody/Black/main.jpg')]) %}
+
+    <!-- Main Content -->
+    <div class="container product-detail-wrapper">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('home') }}" style="color:#a07c5f;">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('shop') }}" style="color:#a07c5f;">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ product.get('title', 'Product') }}</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <!-- Product Images -->
+            <div class="col-lg-6 col-md-6">
+                <div class="product-images">
+                    <img src="{{ images[0] }}" alt="{{ product.get('title','Product') }}" class="main-image"
+                        id="mainImage">
+                    <div class="thumbnail-images">
+                        {% for img in images %}
+                        <img src="{{ img }}" alt="{{ product.get('title','Product') }}"
+                            class="thumbnail {% if loop.first %}active{% endif %}" onclick="changeImage(this)">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-lg-6 col-md-6">
+                <div class="product-info">
+                    <h1 class="product-title">{{ product.get('title', 'Product') }}</h1>
+                    <div class="product-price">${{ '%.2f'|format(product.get('price', 0)) }}</div>
+                    <div class="product-description">
+                        <p>{{ product.get('description', 'No description available.') }}</p>
+                        <p><strong>Material:</strong> 45% Cotton, 50% Polyester, 5% Spandex</p>
+                        <p><strong>Care Instructions:</strong> Machine wash cold, tumble dry low</p>
+                    </div>
+
+                    <!-- Size Selector -->
+                    <div class="size-selector">
+                        <h6 class="fw-bold mb-3">Size</h6>
+                        <div class="size-option" onclick="selectSize(this)">XS</div>
+                        <div class="size-option selected" onclick="selectSize(this)">S</div>
+                        <div class="size-option" onclick="selectSize(this)">M</div>
+                        <div class="size-option" onclick="selectSize(this)">L</div>
+                        <div class="size-option" onclick="selectSize(this)">XL</div>
+                        <div class="size-option" onclick="selectSize(this)">XXL</div>
+                    </div>
+
+                    <!-- Color Selector -->
+                    <div class="color-selector">
+                        <h6 class="fw-bold mb-3">Color</h6>
+                        <div class="color-option selected" style="background-color: #000;" onclick="selectColor(this)"
+                            title="Black"></div>
+                        <div class="color-option" style="background-color: #fff; border: 1px solid #ddd;"
+                            onclick="selectColor(this)" title="White"></div>
+                        <div class="color-option" style="background-color: #8B4513;" onclick="selectColor(this)"
+                            title="Brown"></div>
+                    </div>
+
+                    <!-- Quantity Selector -->
+                    <div class="quantity-selector">
+                        <h6 class="fw-bold me-3">Quantity</h6>
+                        <div class="quantity-btn" onclick="decreaseQuantity()">
+                            <i class="fa fa-minus"></i>
+                        </div>
+                        <input type="number" class="quantity-input" value="1" min="1" max="10" id="quantityInput">
+                        <div class="quantity-btn" onclick="increaseQuantity()">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <button class="btn btn-add-cart" onclick="addToCart()">
+                        <i class="fa fa-shopping-cart me-2"></i>Add to Cart
+                    </button>
+                    <button class="btn btn-wishlist">
+                        <i class="fa fa-heart me-2"></i>Add to Wishlist
+                    </button>
+
+                    <!-- Product Features -->
+                    <div class="product-features">
+                        <!-- features unchanged -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="container-fluid py-4 footer-bg mt-5">
+        <div class="container text-center">
+            <p class="text-muted small mb-0" style="color:#fff !important;">&copy; 2025 STYLELESS. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        /* expose safe product data to JS */
+        const productDetails = {{ product | tojson | safe }};
+
+        function changeImage(thumbnail) {
+            document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
+            if (!thumbnail) return;
+            thumbnail.classList.add('active');
+            const main = document.getElementById('mainImage');
+            if (main) main.src = thumbnail.src;
+        }
+
+        function selectSize(sizeElement) {
+            document.querySelectorAll('.size-option').forEach(size => size.classList.remove('selected'));
+            if (sizeElement) sizeElement.classList.add('selected');
+        }
+
+        function selectColor(colorElement) {
+            document.querySelectorAll('.color-option').forEach(color => color.classList.remove('selected'));
+            if (colorElement) colorElement.classList.add('selected');
+        }
+
+        function increaseQuantity() {
+            const input = document.getElementById('quantityInput');
+            if (!input) return;
+            const current = parseInt(input.value) || 1;
+            const max = parseInt(input.max) || 999;
+            if (current < max) input.value = current + 1;
+        }
+
+        function decreaseQuantity() {
+            const input = document.getElementById('quantityInput');
+            if (!input) return;
+            const current = parseInt(input.value) || 1;
+            const min = parseInt(input.min) || 1;
+            if (current > min) input.value = current - 1;
+        }
+
+        function addToCart() {
+            const sizeEl = document.querySelector('.size-option.selected');
+            const colorEl = document.querySelector('.color-option.selected');
+            const size = sizeEl ? sizeEl.textContent.trim() : 'N/A';
+            const color = colorEl ? (colorEl.title || getComputedStyle(colorEl).backgroundColor) : 'N/A';
+            const quantity = parseInt(document.getElementById('quantityInput')?.value) || 1;
+
+            // Use productDetails (from JSON) with fallbacks
+            const title = productDetails?.title || '{{ product.get("title", "Product") }}';
+            const price = productDetails?.price || {{ product.get('price', 0)
+        }};
+        const image = productDetails?.image || '{{ product.get("image", "") }}';
+        const id = productDetails?.id || {{ product.get('id', 0) }};
+
+        // Create product object
+        const productToAdd = {
+            id: id,
+            title: title,
+            price: price,
+            image: image,
+            quantity: quantity,
+            size: size,
+            color: color
+        };
+
+        // Get cart from localStorage
+        let localCart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Check if product already exists in cart
+        const existingItem = localCart.find(item => item.id === id && item.size === size && item.color === color);
+
+        if (existingItem) {
+            existingItem.quantity = (existingItem.quantity || 1) + quantity;
+        } else {
+            localCart.push(productToAdd);
+        }
+
+        // Save to localStorage
+        localStorage.setItem('cart', JSON.stringify(localCart));
+
+        // Update global cart variable if it exists
+        if (typeof cart !== 'undefined') {
+            cart = localCart;
+        }
+
+        // Update cart display (from script.js)
+        if (typeof displayCart === 'function') {
+            displayCart();
+        } else {
+            // Fallback: manually update cart count
+            const totalItems = localCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            document.querySelectorAll('.count').forEach(el => el.textContent = totalItems);
+        }
+        }
+    </script>
+</body>
+
+</html>

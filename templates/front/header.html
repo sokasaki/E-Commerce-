@@ -1,0 +1,102 @@
+<!-- Add this in the <head> section -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<nav id="mainNavbar" class="navbar navbar-expand-lg navbar-light menu fixed-top ">
+    <div class="container">
+        <div class="d-flex w-100 align-items-center flex-wrap">
+            <!-- Left: Account/User -->
+            <ul class="navbar-nav flex-shrink-1">
+                <li class="nav-item dropdown text-center ms-1">
+                    <a class="nav-link taga dropdown-toggle" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" >
+                        <i class="fa-solid fa-user fs-5 text-secondary-emphasis"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Login</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- Center: Brand -->
+            <a class="navbar-brand mx-auto text-dark fw-bold text-center" href="{{ url_for('home') }}">STYLELESS</a>
+            <!-- Right: Cart -->
+            <ul class="navbar-nav flex-shrink-1 justify-content-end">
+                <li class="nav-item text-center me-3">
+                    <a class="nav-link position-relative taga cart" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" href="#" aria-label="Cart">
+                        <i class="fa-solid fa-cart-shopping fs-5"></i>
+                        <span
+                            class="position-absolute top-1 start- translate-middle badge rounded-pill bg-danger icons count">
+                            0
+                        </span>
+                    </a>
+                </li>
+            </ul>
+            <!-- Mobile toggler -->
+            <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <!-- Collapsible mobile menu -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav w-100 d-lg-none">
+                <li class="nav-item dropdown">
+                    <a class="nav-link taga dropdown-toggle" href="#" id="userDropdownMobile" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" aria-label="User menu">
+                        <i class="fa-solid fa-user fs-5"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownMobile">
+                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Login</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link position-relative taga cart" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" href="#" aria-label="Cart">
+                        <i class="fa-solid fa-cart-shopping fs-5"></i>
+                        <span
+                            class="position-absolute top-1 start- translate-middle badge rounded-pill bg-danger icons count">
+                            0
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Cart Sidebar -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasCartLabel">YOUR CART</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <!-- Cart items will be dynamically inserted here by script.js displayCart() function -->
+        <p class="text-muted text-center" id="emptyCartMessage">Your cart is empty.</p>
+    </div>
+    <div class="offcanvas-footer p-3">
+        <hr class="my-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="card-text fs-5">
+                Subtotal
+            </div>
+            <div class="card-text text-end fs-5 total">
+                <h4>$0.00</h4>
+            </div>
+        </div>
+        <div class="d-grid gap-2">
+            <a class="btn btn-outline-dark" href="{{ url_for('cart') }}">View Cart</a>
+            <a class="btn btn-primary" href="{{ url_for('check') }}">Checkout</a>
+        </div>
+    </div>
+</div>

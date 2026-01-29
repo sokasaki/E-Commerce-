@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product | STYLELESS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+
+<body>
+    <div class="d-flex" id="wrapper">
+        {% include 'backend/sidebar.html' %}
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid" id="main-content">
+                <!-- Dashboard Header -->
+                <div class="dashboard-header-row">
+                    <button class="mobile-toggle" id="menu-toggle" aria-label="Toggle menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>Edit Product</h2>
+                    <div class="user-info">
+                        <span class="d-none d-md-inline">Welcome, Admin!</span>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" id="dropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user-alt me-2"></i>Profile</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Product Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fas fa-edit me-2"></i>Update Product Details</span>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('edit_product', pro_id=product.id) }}"
+                            enctype="multipart/form-data">
+                            <input type="hidden" name="product_id" value="{{ product.id }}" />
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex align-items-center justify-content-center"
+                                    style="min-height: 120px;">
+                                    <div class="w-100 d-flex align-items-center justify-content-center">
+                                        <div id="imagePreviewWrapper"
+                                            style="display: inline-block; border: 1px solid #ddd; border-radius: 8px; padding: 2px; background: #fff; max-width: 220px; max-height: 350px; overflow: hidden;">
+                                            <img id="imagePreview"
+                                                src="{{ url_for('static', filename='uploads/products/' ~ product.image_url) if product.image_url else url_for('static', filename='uploads/no_img.jpg') }}"
+                                                alt="Image Preview"
+                                                style="max-width: 100%; max-height: 100%; border-radius: 8px; display: block; margin: 0 auto;"
+                                                onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/error-img.jpg') }}';" />
+                                            <input type="hidden" name="old_image" value="{{ product.image_url }}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Product Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="{{ product.name }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="sku" class="form-label">SKU <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="sku" name="sku"
+                                        value="{{ product.sku }}" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="price" class="form-label">Price <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="price" name="price" step="any"
+                                        value="{{ product.price }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="stock" class="form-label">Stock <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="stock" name="stock"
+                                        value="{{ product.stock }}" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="category_id" class="form-label">Category <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select" id="category_id" name="category_id" required>
+                                        {% for category in categories %}
+                                        <option value="{{ category.id }}" {% if category.id==product.category_id
+                                            %}selected{% endif %}>{{ category.name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-select" id="status" name="status">
+                                        <option value="active" {% if product.status=='active' %}selected{% endif %}>
+                                            Active
+                                        </option>
+                                        <option value="inactive" {% if product.status=='inactive' %}selected{% endif %}>
+                                            Inactive
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description"
+                                    rows="4">{{ product.description }}</textarea>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label for="image_url" class="form-label">Product Image</label>
+                                    <div id="dropZone" class="dropzone-area mb-2"
+                                        onclick="document.getElementById('image_url').click();"
+                                        ondragover="event.preventDefault(); this.classList.add('dragover');"
+                                        ondragleave="this.classList.remove('dragover');" ondrop="handleDrop(event)">
+                                        <span id="dropZoneText">Drag & Drop or Click to Select Image</span>
+                                        <input type="file" id="image_url" name="image_url" accept="image/*"
+                                            style="display:none;" onchange="previewImageFile()">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Update Product
+                                </button>
+                                <a href="{{ url_for('products') }}" class="btn btn-secondary">
+                                    <i class="fas fa-times me-2"></i>Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    <style>
+        .dropzone-area {
+            border: 2px dashed #6c757d;
+            border-radius: 8px;
+            padding: 32px 12px;
+            text-align: center;
+            color: #6c757d;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .dropzone-area.dragover {
+            border-color: #007bff;
+            background: #f0f8ff;
+        }
+    </style>
+    <script>
+        function previewImageFile() {
+            const input = document.getElementById('image_url');
+            const img = document.getElementById('imagePreview');
+            const wrapper = document.getElementById('imagePreviewWrapper');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    wrapper.style.display = 'inline-block';
+                };
+                reader.readAsDataURL(input.files[0]);
+                document.getElementById('dropZoneText').style.display = 'none';
+            } else {
+                img.src = "{{ product.image_url if product.image_url else url_for('static', filename='uploads/no_img.jpg') }}";
+                img.style.display = 'block';
+                wrapper.style.display = 'inline-block';
+                document.getElementById('dropZoneText').style.display = '';
+            }
+        }
+        function handleDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('dragover');
+            const files = event.dataTransfer.files;
+            if (files && files[0]) {
+                const input = document.getElementById('image_url');
+                input.files = files;
+                previewImageFile();
+            }
+        }
+    </script>
+</body>
+
+</html>

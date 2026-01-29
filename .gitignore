@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+*.egg
+
+# Virtual env
+.venv/
+venv/
+env/
+ENV/
+
+# Flask
+instance/
+*.sqlite
+*.db
+*.log
+
+# Uploads (ignore user uploads)
+static/uploads/
+uploads/
+
+# Migrations cache
+migrations/**/__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
