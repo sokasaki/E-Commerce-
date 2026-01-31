@@ -26,6 +26,7 @@ static/final_project
 
 # Migrations cache
 migrations/**/__pycache__/
+migrations
 
 # OS
 .DS_Store
