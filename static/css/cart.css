@@ -1,25 +1,212 @@
 .cart-glass {
-  background: rgba(255, 255, 255, 0.85);
+  background: #fff;
   border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(60, 60, 120, 0.12);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(200, 200, 200, 0.18);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  backdrop-filter: none;
+  border: none;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
+.cart-glass:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
 .table thead th {
-  font-family: "Poppins", Arial, sans-serif;
-  font-weight: 600;
-  font-size: 1.1rem;
-  background: rgba(240, 240, 255, 0.7);
-  border-radius: 12px 12px 0 0;
-  color: #3b3b6d;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  background: transparent;
+  border-top: none;
+  border-bottom: 2px solid #e5e7eb;
+  color: #1f2937;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1rem 0.75rem;
 }
+
 .table td,
 .table th {
   vertical-align: middle;
 }
+
 .btn-outline-danger {
   border-radius: 8px;
 }
+
+.cart-title {
+  color: #1f2937;
+  letter-spacing: 0.5px;
+  border-bottom: 3px solid #4a2c5d;
+  padding-bottom: 1rem;
+}
+
 .cart-summary {
   min-width: 220px;
 }
+
+/* Enhanced Cart Page Styling */
+.cart-glass h2 {
+  color: #4a2c5d;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #a07c5f;
+}
+
+.table tbody tr {
+  background-color: #fff;
+  border: 1px solid #f3f4f6;
+  border-radius: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table tbody tr:hover {
+  background-color: #f9fafb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: #d1d5db;
+}
+
+.btn-outline-primary {
+  border: 2px solid #4a2c5d;
+  color: #4a2c5d;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+}
+
+.btn-outline-primary:hover {
+  background-color: #4a2c5d;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(74, 44, 93, 0.25);
+  border-color: #4a2c5d;
+}
+
+.btn-outline-danger {
+  border: 2px solid #ef4444;
+  color: #ef4444;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 0.5rem 1rem;
+}
+
+.btn-outline-danger:hover {
+  background-color: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.cart-summary {
+  min-width: 220px;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  padding: 1.5rem;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cart-summary > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.cart-summary .fw-bold {
+  color: #4a2c5d;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.cart-summary hr {
+  margin: 0.75rem 0;
+  opacity: 0.5;
+}
+
+.btn-primary {
+  background-color: #1f2937;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(31, 41, 55, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: #111827;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(31, 41, 55, 0.3);
+}
+
+/* Empty Cart Message */
+.text-center.py-5.d-none ~ * {
+  display: none;
+}
+
+.text-center.py-5 {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Product Quantity Input */
+.input-group {
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.input-group .form-control {
+  border: none;
+  text-align: center;
+  font-weight: 600;
+}
+
+.input-group .btn {
+  border-radius: 0;
+  border: none;
+  background-color: #f3f4f6;
+  color: #4a2c5d;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-weight: 700;
+}
+
+.input-group .btn:hover {
+  background-color: #e5e7eb;
+  color: #3e244b;
+}
+
+/* Responsive Cart */
+@media (max-width: 768px) {
+  .cart-summary {
+    margin-top: 2rem;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+
+  .btn-outline-primary {
+    margin-bottom: 0.5rem;
+  }

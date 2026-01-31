@@ -26,7 +26,7 @@ function saveCart() {
 function addCartHome(selectedProduct) {
   if (selectedProduct) {
     const existingItem = cart.find(
-      (item) => item.title === selectedProduct.title
+      (item) => item.title === selectedProduct.title,
     );
     if (existingItem) {
       existingItem.quantity = (existingItem.quantity || 1) + 1;
@@ -44,7 +44,7 @@ function addCartHome(selectedProduct) {
 // Display cart contents
 function displayCart() {
   const offcanvasBody = document.querySelector(
-    "#offcanvasCart .offcanvas-body"
+    "#offcanvasCart .offcanvas-body",
   );
   const viewCartBtn = document.querySelector('a[href*="cart"]');
   const checkoutBtn = document.querySelector('a[href*="check"]');
@@ -86,8 +86,8 @@ function displayCart() {
     cartHtml += `
             <div class="cart-item d-flex align-items-center mb-3 pb-3 border-bottom">
                 <img src="${item.image}" class="img-fluid rounded me-3" alt="${
-      item.title
-    }" style="width: 48px; height: 48px; object-fit: cover;">
+                  item.title
+                }" style="width: 48px; height: 48px; object-fit: cover;">
                 <div class="cart-item-details flex-grow-1">
                     <h6 class="cart-item-title mb-1">${item.title}</h6>
                     <div class="d-flex align-items-center mt-1">
@@ -186,7 +186,7 @@ function initializeShopPage() {
         currentProducts = allProducts.filter(
           (product) =>
             product.title.toLowerCase().includes(searchTerm) ||
-            product.category.toLowerCase().includes(searchTerm)
+            product.category.toLowerCase().includes(searchTerm),
         );
       }
       renderProducts();
@@ -268,13 +268,13 @@ function renderProducts() {
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 product-card">
       <div class="card position-relative h-100">
         <a href="/detail?name=${encodeURIComponent(
-          product.title
+          product.title,
         )}" class="text-decoration-none text-dark">
           <img src="${
             product.image
           }" class="card-img-top" loading="lazy" alt="${
-        product.title
-      }" style="height: 250px; object-fit: cover;">
+            product.title
+          }" style="height: 250px; object-fit: cover;">
           <div class="card-body text-center">
             <h5 class="card-title fw-semibold text-truncate mb-1">${
               product.title
@@ -292,7 +292,7 @@ function renderProducts() {
         </div>
       </div>
     </div>
-  `
+  `,
     )
     .join("");
 

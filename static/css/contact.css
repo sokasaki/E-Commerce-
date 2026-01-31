@@ -37,6 +37,7 @@
 .icon-circle:hover {
   background: #e0e7ff;
   color: #0d6efd;
+  transform: scale(1.1);
 }
 
 /* Headings and body font */
@@ -48,6 +49,117 @@ body,
 }
 h1,
 h2,
+h3,
+h4 {
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 700;
+  color: #4a2c5d;
+}
+
+/* Enhanced Contact Form */
+.contact-glass .form-label {
+  color: #4a2c5d;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.contact-glass .form-control,
+.contact-glass .form-select {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.contact-glass .form-control:focus,
+.contact-glass .form-select:focus {
+  border-color: #4a2c5d;
+  box-shadow: 0 0 0 0.2rem rgba(74, 44, 93, 0.15);
+}
+
+.contact-glass textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Contact Info Cards */
+.contact-info-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.contact-info-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+}
+
+.contact-info-card .icon-circle {
+  background: linear-gradient(135deg, #4a2c5d 0%, #a07c5f 100%);
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.contact-info-card h5 {
+  color: #4a2c5d;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.contact-info-card p {
+  color: #666;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Social Links */
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #f0f0f0;
+  color: #4a2c5d;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.social-links a:hover {
+  background: #4a2c5d;
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(74, 44, 93, 0.3);
+}
+
+/* Submit Button */
+.contact-glass .btn-primary {
+  background-color: #4a2c5d;
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem 2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.contact-glass .btn-primary:hover {
+  background-color: #3e244b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(74, 44, 93, 0.4);
+}
+
 h3,
 h4,
 h5,
