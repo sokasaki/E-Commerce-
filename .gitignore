@@ -21,8 +21,8 @@ instance/
 *.log
 
 # Uploads (ignore user uploads)
-static/uploads/
-uploads/
+static/uploads/products
+static/final_project
 
 # Migrations cache
 migrations/**/__pycache__/
