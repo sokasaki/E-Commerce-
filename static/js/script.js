@@ -265,30 +265,33 @@ function renderProducts() {
   container.innerHTML = currentProducts
     .map(
       (product, index) => `
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 product-card">
-      <div class="card position-relative h-100">
-        <a href="/detail?name=${encodeURIComponent(
-          product.title,
-        )}" class="text-decoration-none text-dark">
-          <img src="${
-            product.image
-          }" class="card-img-top" loading="lazy" alt="${
-            product.title
-          }" style="height: 250px; object-fit: cover;">
-          <div class="card-body text-center">
-            <h5 class="card-title fw-semibold text-truncate mb-1">${
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="premium-product-card">
+        <div class="premium-image-container">
+          <a href="/detail?name=${encodeURIComponent(
+            product.title,
+          )}" class="image-link">
+            <img src="${
+              product.image
+            }" class="premium-product-image" loading="lazy" alt="${
               product.title
-            }</h5>
-            <p class="card-text text-muted small mb-2">${product.category}</p>
-            <p class="card-text fw-bold fs-5 text-dark product-price">$${
-              product.price
-            }</p>
+            }" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
+          </a>
+        </div>
+        <div class="card-body-premium">
+          <h3 class="premium-title">${product.title}</h3>
+          <div class="status-badges">
+            <span class="badge-pill badge-category">${product.category}</span>
           </div>
-        </a>
-        <div class="card-footer bg-white border-0">
-          <button type="button" class="btn btn-primary add-to-cart-btn w-100" data-product-index="${index}">
-            Add to cart
-          </button>
+          <div class="card-footer-premium">
+            <div class="price-section">
+              <span class="price-label">Price</span>
+              <p class="premium-price">$${product.price}</p>
+            </div>
+            <button type="button" class="btn-add-to-cart add-to-cart-btn" data-product-index="${index}">
+              <i class="fas fa-shopping-bag"></i> Add
+            </button>
+          </div>
         </div>
       </div>
     </div>
