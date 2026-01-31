@@ -33,7 +33,7 @@ import routes
 def before_request():
     url = request.path
     if url.startswith('/admin') and not url.startswith('/login'):
-        if not session.get("user_id"):
+        if session.get("user_id") is None:
             flash("Please log in first.", "warning")
             return redirect(url_for("login", next=request.path))
 

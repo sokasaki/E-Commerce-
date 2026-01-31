@@ -89,7 +89,7 @@
                 if (result.isConfirmed) {
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = `/deleteCategory`;
+                    form.action = `/admin/deleteCategory?category_id=${categoryId}`;
 
                     const input = document.createElement('input');
                     input.type = 'hidden';
