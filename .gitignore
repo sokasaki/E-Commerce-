@@ -21,7 +21,7 @@ ENV/
 *.log
 
 # Uploads (ignore user uploads)
-static/uploads/products
+# static/uploads/products
 static/final_project
 
 # Migrations cache
