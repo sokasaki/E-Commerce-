@@ -39,6 +39,17 @@ Thumbs.db
 # Logs
 *.log
 
+# Environment
+.env
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Test scripts
+test_node.js
+test_khqr.py
+
 # Documentation files
 DESIGN_EVOLUTION.md
 DESIGN_UPDATE_SUMMARY.md

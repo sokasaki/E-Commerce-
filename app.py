@@ -22,7 +22,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Import models
-from model import Product, Category, User
+from model import Product, Category, User, CartItem, Order, OrderItem, Customer
 
 
 from routes.backend.auth import *
@@ -32,10 +32,16 @@ import routes
 @app.before_request
 def before_request():
     url = request.path
-    if url.startswith('/admin') and not url.startswith('/login'):
+    if url.startswith('/admin') and not url.startswith('/admin/login') and not url.startswith('/do_admin_login'):
         if session.get("user_id") is None:
             flash("Please log in first.", "warning")
-            return redirect(url_for("login", next=request.path))
+            return redirect(url_for("admin_login"))
+        
+        # Security: Only allow users with 'admin' role to access /admin routes
+        if session.get("role") != 'admin':
+            flash("Access denied. You do not have admin privileges.", "danger")
+            return redirect(url_for("admin_login"))
+
 
 
 @app.route('/admin/upload', methods=['GET', 'POST'])

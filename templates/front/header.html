@@ -1,102 +1,136 @@
-<!-- Add this in the <head> section -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-<nav id="mainNavbar" class="navbar navbar-expand-lg navbar-light menu fixed-top ">
-    <div class="container">
-        <div class="d-flex w-100 align-items-center flex-wrap">
-            <!-- Left: Account/User -->
-            <ul class="navbar-nav flex-shrink-1">
-                <li class="nav-item dropdown text-center ms-1">
-                    <a class="nav-link taga dropdown-toggle" href="#" id="userDropdown" role="button"
-                        data-bs-toggle="dropdown" >
-                        <i class="fa-solid fa-user fs-5 text-secondary-emphasis"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Login</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <!-- Center: Brand -->
-            <a class="navbar-brand mx-auto text-dark fw-bold text-center" href="{{ url_for('home') }}">STYLELESS</a>
-            <!-- Right: Cart -->
-            <ul class="navbar-nav flex-shrink-1 justify-content-end">
-                <li class="nav-item text-center me-3">
-                    <a class="nav-link position-relative taga cart" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" href="#" aria-label="Cart">
-                        <i class="fa-solid fa-cart-shopping fs-5"></i>
-                        <span
-                            class="position-absolute top-1 start- translate-middle badge rounded-pill bg-danger icons count">
-                            0
-                        </span>
-                    </a>
-                </li>
-            </ul>
-            <!-- Mobile toggler -->
-            <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
+<!-- Header with Nextgen Aesthetic -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<div id="cartApp">
+    <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-light fixed-top bg-white border-bottom py-3">
+        <div class="container">
+            <!-- Brand/Logo -->
+            <a class="navbar-brand fw-bold fs-3" href="{{ url_for('home') }}" style="font-family: 'Outfit', sans-serif; letter-spacing: -1px;">STYLELESS</a>
+
+            <!-- Mobile Toggler -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
-        </div>
-        <!-- Collapsible mobile menu -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav w-100 d-lg-none">
-                <li class="nav-item dropdown">
-                    <a class="nav-link taga dropdown-toggle" href="#" id="userDropdownMobile" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false" aria-label="User menu">
-                        <i class="fa-solid fa-user fs-5"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownMobile">
-                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Login</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link position-relative taga cart" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" href="#" aria-label="Cart">
-                        <i class="fa-solid fa-cart-shopping fs-5"></i>
-                        <span
-                            class="position-absolute top-1 start- translate-middle badge rounded-pill bg-danger icons count">
-                            0
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-4">
+                    <li class="nav-item d-none d-lg-block"><a class="nav-link fw-semibold text-dark px-0" href="{{ url_for('home') }}">Home</a></li>
+                    <li class="nav-item d-none d-lg-block"><a class="nav-link fw-semibold text-dark px-0" href="{{ url_for('shop') }}">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold text-dark px-0" href="{{ url_for('about') }}">About</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold text-dark px-0" href="{{ url_for('faq') }}">FAQs</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold text-dark px-0" href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+
+                <!-- Right Actions -->
+                <div class="d-none d-lg-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <a class="text-dark fs-5 d-flex align-items-center gap-2 text-decoration-none" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-regular fa-user"></i>
+                            {% if session.get('full_name') %}
+                                <span class="small fw-semibold d-none d-sm-inline">{{ session['full_name'] }}</span>
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-3 rounded-4" aria-labelledby="userDropdown">
+                            {% if session.get('user_id') %}
+                                <li><h6 class="dropdown-header px-0 mb-2">Account</h6></li>
+                                <li><a class="dropdown-item rounded-3 py-2" href="{{ url_for('profile') }}">My Profile</a></li>
+                                <li><a class="dropdown-item rounded-3 py-2 text-danger" href="{{ url_for('logout') }}">Logout</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item rounded-3 py-2" href="{{ url_for('login') }}">Login</a></li>
+                                <li><a class="dropdown-item rounded-3 py-2" href="{{ url_for('register') }}">Register</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                    <!-- Cart Trigger -->
+                    <a class="text-dark fs-5 position-relative" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button">
+                        <i class="fa-solid fa-shopping-bag"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" style="font-size: 0.6rem;">
+                            [[ cartCount ]]
                         </span>
                     </a>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!-- Cart Sidebar -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasCartLabel">YOUR CART</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <!-- Cart items will be dynamically inserted here by script.js displayCart() function -->
-        <p class="text-muted text-center" id="emptyCartMessage">Your cart is empty.</p>
-    </div>
-    <div class="offcanvas-footer p-3">
-        <hr class="my-3">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="card-text fs-5">
-                Subtotal
+    <!-- Cart Sidebar (Offcanvas) -->
+    <div class="offcanvas offcanvas-end border-0 shadow-lg" tabindex="-1" id="offcanvasCart" style="width: 400px; border-radius: 24px 0 0 24px;">
+        <div class="offcanvas-header p-4 border-bottom">
+            <h5 class="offcanvas-title fw-bold">YOUR BAG</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4">
+            <!-- Empty State -->
+            <div v-if="cart.length === 0" class="text-center py-5">
+                <i class="fa-solid fa-shopping-bag fs-1 text-light-gray mb-3 opacity-25"></i>
+                <p class="text-muted">Your bag is currently empty.</p>
+                <a href="{{ url_for('shop') }}" class="btn btn-dark rounded-pill px-4 mt-2">Start Shopping</a>
             </div>
-            <div class="card-text text-end fs-5 total">
-                <h4>$0.00</h4>
+
+            <!-- Cart Items -->
+            <div v-else>
+                <div v-for="(item, index) in cart" :key="item.id" class="cart-item-premium">
+                    <div class="cart-item-img">
+                        <img :src="item.image" :alt="item.title">
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="fw-bold mb-0" style="font-size: 0.9rem;">[[ item.title ]]</h6>
+                        <div class="text-muted small">$[[ item.price.toFixed(2) ]]</div>
+                        <div class="qty-control-mini">
+                            <button class="qty-btn-mini" @click="updateQty(index, -1)"><i class="fa fa-minus"></i></button>
+                            <span class="fw-bold mx-2" style="font-size: 0.75rem;">[[ item.quantity ]]</span>
+                            <button class="qty-btn-mini" @click="updateQty(index, 1)"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div class="fw-bold small mb-2">$[[ (item.price * item.quantity).toFixed(2) ]]</div>
+                        <button class="btn-remove-mini" @click="removeItem(index)"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="d-grid gap-2">
-            <a class="btn btn-outline-dark" href="{{ url_for('cart') }}">View Cart</a>
-            <a class="btn btn-primary" href="{{ url_for('check') }}">Checkout</a>
-        </div>
+        <div class="offcanvas-footer p-4 border-top bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted fw-semibold">Subtotal</span>
+                <span class="fs-4 fw-bold">$[[ cartTotal.toFixed(2) ]]</span>
+            </div>
+            <div class="d-grid gap-2">
+                <a href="{{ url_for('check') }}" :class="['btn btn-dark btn-lg rounded-pill fw-bold py-3', { 'disabled': cart.length === 0 }]">Checkout Now</a>
+                <a href="{{ url_for('cart') }}" :class="['btn btn-outline-dark btn-lg rounded-pill fw-bold py-3', { 'disabled': cart.length === 0 }]">View Bag</a>
+            </div>
     </div>
 </div>
+
+<!-- Styles for Hover Effects -->
+<style>
+    .nav-link {
+        transition: color 0.3s ease;
+        position: relative;
+    }
+    .nav-link:hover {
+        color: #111 !important;
+    }
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #111;
+        transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+        width: 100%;
+    }
+    .dropdown-item:active {
+        background-color: #f8f9fa;
+        color: #111;
+    }
+    #mainNavbar {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.9) !important;
+    }
+</style>

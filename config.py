@@ -2,7 +2,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-SECRET_KEY = "adscasedwq"
+SECRET_KEY = os.environ.get('SECRET_KEY', 'adscasedwq')
 
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static/uploads/products')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}

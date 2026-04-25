@@ -1,321 +1,219 @@
-// ============================================================================
-// SHOPPING CART FUNCTIONALITY
-// ============================================================================
-// This file handles shopping cart operations for the e-commerce site.
-// Product data is now fetched from the Flask backend API.
-// ============================================================================
+/**
+ * STYLELESS - Main Application Script (Vue.js Powered)
+ * Real-time, reactive cart management with shared state
+ */
 
-// ============================================================================
-// CART STATE AND INITIALIZATION
-// ============================================================================
+const { createApp, ref, computed, onMounted, reactive } = Vue;
 
-let cart = JSON.parse(localStorage.getItem("cart")) || []; // Load cart from localStorage
-const emptyCartMessage = document.getElementById("emptyCartMessage");
-const totalElement = document.querySelector(".total h4");
+// 1. Shared Reactive State (accessible by both Vue and Global functions)
+const cartState = reactive({
+    items: [],
+    loading: false,
+    async sync() {
+        try {
+            const response = await fetch('/api/cart');
+            const data = await response.json();
+            if (Array.isArray(data)) {
+                this.items = data.map(item => ({
+                    id: item.id,
+                    cart_item_id: item.cart_item_id,
+                    title: item.title || item.name,
+                    price: parseFloat(item.price),
+                    image: item.image || item.image_url,
+                    quantity: item.quantity || 1
+                }));
+                localStorage.setItem("cart", JSON.stringify(this.items));
+            }
+        } catch (err) {
+            console.error('Sync Error:', err);
+        }
+    },
+    async addToBag(product) {
+        if (!product) return;
+        const formData = new FormData();
+        formData.append('product_id', product.id);
+        formData.append('quantity', 1);
 
-// Save cart to localStorage
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
+        try {
+            const response = await fetch('/cart/add', {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                body: formData
+            });
+            
+            if (response.status === 401) {
+                if (window.notify) window.notify('Please log in to add items.', 'Access Denied', 'warning');
+                else alert('Please log in to add items.');
+                setTimeout(() => window.location.href = '/login', 1500);
+                return;
+            }
 
-// ============================================================================
-// CART FUNCTIONS
-// ============================================================================
-
-// Add product to the cart
-function addCartHome(selectedProduct) {
-  if (selectedProduct) {
-    const existingItem = cart.find(
-      (item) => item.title === selectedProduct.title,
-    );
-    if (existingItem) {
-      existingItem.quantity = (existingItem.quantity || 1) + 1;
-    } else {
-      selectedProduct.quantity = 1;
-      cart.push(selectedProduct);
+            const data = await response.json();
+            if (data.message) {
+                if (window.notify) window.notify(data.message, 'Added to Bag', 'success');
+                await this.sync();
+            }
+        } catch (err) {
+            console.error('Add Error:', err);
+        }
     }
-    saveCart();
-    displayCart();
-  } else {
-    console.error("Product not found or invalid product object passed.");
-  }
-}
-
-// Display cart contents
-function displayCart() {
-  const offcanvasBody = document.querySelector(
-    "#offcanvasCart .offcanvas-body",
-  );
-  const viewCartBtn = document.querySelector('a[href*="cart"]');
-  const checkoutBtn = document.querySelector('a[href*="check"]');
-
-  if (!offcanvasBody) {
-    console.error("Offcanvas body not found.");
-    return;
-  }
-
-  if (cart.length === 0) {
-    offcanvasBody.innerHTML =
-      '<p class="text-muted text-center" id="emptyCartMessage">Your cart is empty.</p>';
-    totalElement.innerHTML = "<h4>$0.00</h4>";
-    document.querySelector(".icons.count").textContent = "0";
-
-    // Disable buttons when cart is empty
-    if (viewCartBtn) {
-      viewCartBtn.classList.add("disabled");
-      viewCartBtn.style.pointerEvents = "none";
-      viewCartBtn.style.opacity = "0.5";
-    }
-    if (checkoutBtn) {
-      checkoutBtn.classList.add("disabled");
-      checkoutBtn.style.pointerEvents = "none";
-      checkoutBtn.style.opacity = "0.5";
-    }
-    return;
-  }
-
-  let cartHtml = "";
-  let totalPrice = 0;
-  let totalItems = 0;
-
-  cart.forEach((item, index) => {
-    const quantity = item.quantity || 1;
-    const itemPrice = item.price * quantity;
-    totalPrice += itemPrice;
-    totalItems += quantity;
-    cartHtml += `
-            <div class="cart-item d-flex align-items-center mb-3 pb-3 border-bottom">
-                <img src="${item.image}" class="img-fluid rounded me-3" alt="${
-                  item.title
-                }" style="width: 48px; height: 48px; object-fit: cover;">
-                <div class="cart-item-details flex-grow-1">
-                    <h6 class="cart-item-title mb-1">${item.title}</h6>
-                    <div class="d-flex align-items-center mt-1">
-                        <button class="btn btn-outline-secondary btn-sm px-2 me-1" type="button" onclick="changeQuantity(${index}, -1)"><i class="fa fa-minus"></i></button>
-                        <span class="mx-2">${quantity}</span>
-                        <button class="btn btn-outline-secondary btn-sm px-2 ms-1" type="button" onclick="changeQuantity(${index}, 1)"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
-                <div class="text-end ms-3">
-                    <div class="fw-bold">$${itemPrice.toFixed(2)}</div>
-                    <button type="button" class="btn btn-outline-danger btn-sm mt-2" aria-label="Remove" onclick="deleteItem(${index})"><i class="fa fa-trash"></i></button>
-                </div>
-            </div>
-        `;
-  });
-
-  offcanvasBody.innerHTML = cartHtml;
-  totalElement.innerHTML = `<h4>$${totalPrice.toFixed(2)}</h4>`;
-  document.querySelector(".icons.count").textContent = totalItems.toString();
-
-  // Enable buttons when cart has items
-  if (viewCartBtn) {
-    viewCartBtn.classList.remove("disabled");
-    viewCartBtn.style.pointerEvents = "auto";
-    viewCartBtn.style.opacity = "1";
-  }
-  if (checkoutBtn) {
-    checkoutBtn.classList.remove("disabled");
-    checkoutBtn.style.pointerEvents = "auto";
-    checkoutBtn.style.opacity = "1";
-  }
-}
-
-// Delete product from the cart
-function deleteItem(index) {
-  cart.splice(index, 1);
-  saveCart();
-  displayCart();
-}
-
-// Add this function to handle quantity changes
-function changeQuantity(index, delta) {
-  if (cart[index]) {
-    cart[index].quantity = Math.max(1, (cart[index].quantity || 1) + delta);
-    saveCart();
-    displayCart();
-  }
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  // Navbar scroll effect
-  const mainNavbar = document.getElementById("mainNavbar");
-  if (mainNavbar) {
-    window.addEventListener("scroll", function () {
-      if (window.scrollY > 50) {
-        // Adjust scroll threshold as needed
-        mainNavbar.classList.add("scrolled");
-      } else {
-        mainNavbar.classList.remove("scrolled");
-      }
-    });
-  }
-
-  // Display cart on load
-  displayCart();
-
-  // Initialize shop page functionality if on shop page
-  if (document.getElementById("productsContainer")) {
-    initializeShopPage();
-  }
 });
 
+// 2. Vue Application
+const cartApp = createApp({
+    setup() {
+        const cart = computed(() => cartState.items);
+        const cartCount = computed(() => cartState.items.reduce((acc, item) => acc + item.quantity, 0));
+        const cartTotal = computed(() => cartState.items.reduce((acc, item) => acc + (item.price * item.quantity), 0));
+
+        const updateQty = async (index, delta) => {
+            const item = cartState.items[index];
+            if (!item) return;
+
+            const newQty = Math.max(1, (item.quantity || 1) + delta);
+            if (item.cart_item_id) {
+                const formData = new FormData();
+                formData.append('item_id', item.cart_item_id);
+                formData.append('quantity', newQty);
+
+                try {
+                    await fetch('/cart/update', { method: 'POST', body: formData });
+                    await cartState.sync();
+                } catch (err) {
+                    console.error('Update Error:', err);
+                }
+            }
+        };
+
+        const removeItem = async (index) => {
+            const item = cartState.items[index];
+            if (!item || !item.cart_item_id) return;
+
+            try {
+                await fetch(`/cart/remove/${item.cart_item_id}`, { method: 'POST' });
+                await cartState.sync();
+            } catch (err) {
+                console.error('Delete Error:', err);
+            }
+        };
+
+        onMounted(() => {
+            const saved = localStorage.getItem("cart");
+            if (saved) cartState.items = JSON.parse(saved);
+            cartState.sync();
+        });
+
+        return {
+            cart,
+            cartCount,
+            cartTotal,
+            updateQty,
+            removeItem
+        };
+    },
+    delimiters: ['[[', ']]']
+});
+
+// Mount the App
+cartApp.mount('#cartApp');
+
+// 3. Global Compatibility Layer (Legacy Function Names)
+window.addCartHome = (product) => {
+    cartState.addToBag(product);
+};
+
 // ============================================================================
-// SHOP PAGE FUNCTIONALITY
+// NON-VUE LOGIC (Shop Grid & Filters)
 // ============================================================================
 
 let allProducts = [];
 let currentProducts = [];
 
 function initializeShopPage() {
-  // Get products from server-rendered data
-  if (typeof shopProducts !== "undefined") {
-    allProducts = shopProducts;
-    currentProducts = [...allProducts];
-    updateResultsCount();
-  }
-
-  // Search functionality
-  const searchInput = document.getElementById("searchInput");
-  if (searchInput) {
-    searchInput.addEventListener("input", function () {
-      const searchTerm = this.value.toLowerCase();
-      if (searchTerm === "") {
+    if (typeof shopProducts !== "undefined") {
+        allProducts = shopProducts;
         currentProducts = [...allProducts];
-      } else {
-        currentProducts = allProducts.filter(
-          (product) =>
-            product.title.toLowerCase().includes(searchTerm) ||
-            product.category.toLowerCase().includes(searchTerm),
-        );
-      }
-      renderProducts();
-      updateResultsCount();
-    });
-  }
+        renderProducts();
+        updateResultsCount();
+    }
 
-  // Handle search form submission
-  const searchForm = document.getElementById("searchForm");
-  if (searchForm) {
-    searchForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      applyFilters();
-    });
-  }
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        searchInput.addEventListener("input", () => applyFilters());
+    }
 }
 
-// Apply filters function
 function applyFilters() {
-  const category = document.getElementById("categoryFilter").value;
-  const sort = document.getElementById("sortFilter").value;
-  const search = document.getElementById("searchInput").value;
+    const category = document.getElementById("categoryFilter")?.value || "all";
+    const sort = document.getElementById("sortFilter")?.value || "default";
+    const search = document.getElementById("searchInput")?.value.toLowerCase() || "";
 
-  // Show loading spinner
-  document.getElementById("loadingSpinner").classList.remove("d-none");
-
-  // Build URL with parameters
-  const params = new URLSearchParams();
-  if (category !== "all") params.append("category", category);
-  if (search) params.append("search", search);
-  if (sort !== "default") params.append("sort", sort);
-
-  // Fetch filtered products
-  fetch("/api/products/filter?" + params.toString())
-    .then((response) => response.json())
-    .then((data) => {
-      currentProducts = data;
-      renderProducts();
-      updateResultsCount();
-    })
-    .catch((error) => {
-      console.error("Error fetching filtered products:", error);
-    })
-    .finally(() => {
-      // Hide loading spinner
-      document.getElementById("loadingSpinner").classList.add("d-none");
+    currentProducts = allProducts.filter(p => {
+        const matchesCategory = (category === "all") || (p.category === category);
+        const matchesSearch = (p.title || p.name || "").toLowerCase().includes(search);
+        return matchesCategory && matchesSearch;
     });
+
+    if (sort === "price-low") currentProducts.sort((a, b) => a.price - b.price);
+    else if (sort === "price-high") currentProducts.sort((a, b) => b.price - a.price);
+    else if (sort === "newest") currentProducts.sort((a, b) => (b.id || 0) - (a.id || 0));
+
+    renderProducts();
+    updateResultsCount();
 }
 
-// Clear filters function
-function clearFilters() {
-  document.getElementById("categoryFilter").value = "all";
-  document.getElementById("sortFilter").value = "default";
-  document.getElementById("searchInput").value = "";
-
-  // Reset to all products
-  currentProducts = [...allProducts];
-  renderProducts();
-  updateResultsCount();
-}
-
-// Render products function
 function renderProducts() {
-  const container = document.getElementById("productsContainer");
+    const container = document.getElementById("productsContainer");
+    if (!container) return;
 
-  if (currentProducts.length === 0) {
-    container.innerHTML = `
-      <div class="col-12 text-center py-5">
-        <h3 class="text-muted">No products found</h3>
-        <p>Try adjusting your filters or search terms</p>
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = currentProducts
-    .map(
-      (product, index) => `
-    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-      <div class="premium-product-card">
-        <div class="premium-image-container">
-          <a href="/detail?name=${encodeURIComponent(
-            product.title,
-          )}" class="image-link">
-            <img src="${
-              product.image
-            }" class="premium-product-image" loading="lazy" alt="${
-              product.title
-            }" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
-          </a>
-        </div>
-        <div class="card-body-premium">
-          <h3 class="premium-title">${product.title}</h3>
-          <div class="status-badges">
-            <span class="badge-pill badge-category">${product.category}</span>
-          </div>
-          <div class="card-footer-premium">
-            <div class="price-section">
-              <span class="price-label">Price</span>
-              <p class="premium-price">$${product.price}</p>
+    if (currentProducts.length === 0) {
+        container.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="fa-solid fa-search fs-1 text-muted mb-3 opacity-25"></i>
+                <h3 class="fw-bold">No results found</h3>
             </div>
-            <button type="button" class="btn-add-to-cart add-to-cart-btn" data-product-index="${index}">
-              <i class="fas fa-shopping-bag"></i> Add
-            </button>
-          </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = currentProducts.map((p) => `
+        <div class="col-lg-4 col-md-6 col-6">
+            <div class="premium-card">
+                <div class="card-img-box">
+                    <a href="/detail?id=${p.id}">
+                        <img src="${p.image || p.image_url}" alt="${p.title || p.name}">
+                    </a>
+                </div>
+                <div class="premium-card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1 me-3">
+                            <a href="/detail?id=${p.id}" class="card-product-title text-truncate">${p.title || p.name}</a>
+                            <div class="card-product-price">$${parseFloat(p.price).toFixed(2)}</div>
+                        </div>
+                        <button class="btn-add-mini" onclick="addCartHome(${JSON.stringify(p).replace(/"/g, '&quot;')})" title="Add to Bag">
+                            <i class="fa fa-shopping-bag"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  `,
-    )
-    .join("");
-
-  // Attach event listeners to all add-to-cart buttons
-  const addToCartButtons = container.querySelectorAll(".add-to-cart-btn");
-  addToCartButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const productIndex = parseInt(this.getAttribute("data-product-index"));
-      const product = currentProducts[productIndex];
-      addCartHome(product);
-    });
-  });
+    `).join("");
 }
 
-// Update results count
 function updateResultsCount() {
-  const resultsCount = document.getElementById("resultsCount");
-  if (resultsCount) {
-    const count = currentProducts.length;
-    const total = allProducts.length;
-    resultsCount.textContent = `Showing ${count} of ${total} products`;
-  }
+    const countEl = document.getElementById("resultsCount");
+    if (countEl) countEl.textContent = `${currentProducts.length} Items Found`;
 }
+
+// Global Transitions
+document.addEventListener("DOMContentLoaded", function () {
+    if (document.getElementById("productsContainer")) initializeShopPage();
+
+    const navbar = document.getElementById("mainNavbar");
+    if (navbar) {
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 40) navbar.classList.add("scrolled");
+            else navbar.classList.remove("scrolled");
+        });
+    }
+});

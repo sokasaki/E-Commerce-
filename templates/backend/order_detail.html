@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order #{{ order.id }} Details | STYLELESS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .detail-card { border: none; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); background: white; margin-bottom: 24px; }
+        .badge-status { padding: 8px 16px; border-radius: 100px; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px; }
+        .product-img-mini { width: 60px; height: 75px; object-fit: cover; border-radius: 12px; }
+        .customer-avatar { width: 48px; height: 48px; background: #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #475569; }
+        .section-title { font-size: 0.9rem; font-weight: 800; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+        .info-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; }
+        .info-value { font-size: 0.9rem; font-weight: 600; color: #334155; }
+        .timeline-dot { width: 12px; height: 12px; background: #3b82f6; border-radius: 50%; position: relative; z-index: 1; }
+        .timeline-line { position: absolute; left: 5px; top: 12px; bottom: -20px; width: 2px; background: #e2e8f0; }
+    </style>
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        {% include 'backend/sidebar.html' %}
+        <div id="page-content-wrapper">
+            <div class="container-fluid" id="main-content">
+                {% include 'backend/header.html' %}
+
+                <div class="d-flex align-items-center gap-3 mt-4 mb-4">
+                    <a href="{{ url_for('orders') }}" class="btn btn-outline-secondary border-0 rounded-circle">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <h2 class="fw-bold mb-0">Order #{{ order.id }}</h2>
+                    <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill text-uppercase" style="font-size: 0.7rem;">Paid</span>
+                    <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 rounded-pill text-uppercase" style="font-size: 0.7rem;">{{ order.status }}</span>
+                    <div class="ms-auto text-muted small">
+                        <i class="far fa-calendar me-1"></i> {{ order.created_at.strftime('%m.%d.%Y at %I:%M %p') }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Left Column: Order Items & Summary -->
+                    <div class="col-lg-8">
+                        <!-- Items Card -->
+                        <div class="detail-card p-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-box text-primary me-2"></i> Items List
+                            </h5>
+                            <div class="table-responsive">
+                                <table class="table table-borderless align-middle">
+                                    <thead>
+                                        <tr class="text-muted small text-uppercase">
+                                            <th>Product</th>
+                                            <th class="text-center">Price</th>
+                                            <th class="text-center">Qty</th>
+                                            <th class="text-end">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in order.items %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <img src="{{ item.product.image or url_for('static', filename='final_project/banner-1.jpg') }}" class="product-img-mini">
+                                                    <div>
+                                                        <div class="fw-bold text-dark">{{ item.product.name }}</div>
+                                                        <small class="text-muted">ID: {{ item.product.id }}</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center fw-semibold text-muted">${{ "%.2f"|format(item.price_at_time) }}</td>
+                                            <td class="text-center fw-bold">{{ item.quantity }}</td>
+                                            <td class="text-end fw-bold text-dark">${{ "%.2f"|format(item.price_at_time * item.quantity) }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Summary Card -->
+                        <div class="detail-card p-4">
+                            <h5 class="section-title">Payment Summary</h5>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Subtotal ({{ order.items|length }} items)</span>
+                                <span class="fw-bold">${{ "%.2f"|format(order.total_price) }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Delivery</span>
+                                <span class="fw-bold text-success">Free</span>
+                            </div>
+                            <div class="d-flex justify-content-between pt-3 border-top mt-3">
+                                <span class="fw-bold fs-5">Total paid by customer</span>
+                                <span class="fw-bold fs-5 text-primary">${{ "%.2f"|format(order.total_price) }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Activity -->
+                        <div class="detail-card p-4">
+                            <h5 class="section-title">Order Activity</h5>
+                            <div class="position-relative ps-4 mt-3">
+                                <div class="timeline-line"></div>
+                                <div class="mb-4 position-relative">
+                                    <div class="timeline-dot"></div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold small">Order was placed</div>
+                                        <div class="text-muted small">{{ order.created_at.strftime('%b %d, %H:%M') }}</div>
+                                    </div>
+                                </div>
+                                <div class="mb-0 position-relative">
+                                    <div class="timeline-dot bg-secondary opacity-50"></div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold small text-muted">Awaiting fulfillment</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Customer Info -->
+                    <div class="col-lg-4">
+                        <div class="detail-card p-4">
+                            <h5 class="section-title">Customer</h5>
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div class="customer-avatar">
+                                    {{ order.user.customer_profile.first_name[0] if order.user.customer_profile else order.user.username[0] }}
+                                </div>
+                                <div>
+                                    <div class="fw-bold">
+                                        {% if order.user.customer_profile %}
+                                            {{ order.user.customer_profile.first_name }} {{ order.user.customer_profile.last_name }}
+                                        {% else %}
+                                            {{ order.user.username }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-muted small">Customer since {{ order.user.created_at.strftime('%Y') if order.user.created_at else '2024' }}</div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4 opacity-5">
+
+                            <div class="mb-4">
+                                <p class="info-label">Contact Info</p>
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="far fa-envelope text-muted"></i>
+                                    <span class="info-value">{{ order.user.username }}</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fas fa-phone-alt text-muted"></i>
+                                    <span class="info-value">{{ order.user.customer_profile.phone if order.user.customer_profile else 'N/A' }}</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="info-label">Shipping Address</p>
+                                <div class="info-value fw-normal text-muted">
+                                    {% if order.user.customer_profile and order.user.customer_profile.address %}
+                                        {{ order.user.customer_profile.address }}
+                                    {% else %}
+                                        <span class="fst-italic">No address provided</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mb-0">
+                                <p class="info-label">Billing Address</p>
+                                <div class="info-value fw-normal text-muted">
+                                    Same as shipping address
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-card p-4 text-center">
+                            <button class="btn btn-primary w-100 rounded-pill py-3 fw-bold mb-3">
+                                Fulfill Order
+                            </button>
+                            <button class="btn btn-outline-danger w-100 border-0 fw-bold">
+                                Cancel Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

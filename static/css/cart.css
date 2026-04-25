@@ -153,9 +153,6 @@
 }
 
 /* Empty Cart Message */
-.text-center.py-5.d-none ~ * {
-  display: none;
-}
 
 .text-center.py-5 {
   animation: fadeIn 0.3s ease-in;

@@ -18,5 +18,9 @@ from routes.front.contact import *
 from routes.front.about import *
 from routes.front.faq import *
 from routes.front.profile import *
+from routes.front.notifications import *
+from routes.front.payment import *
 
 # Auth Routes
+
+from routes.error import *

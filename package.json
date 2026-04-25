@@ -1,0 +1,24 @@
+{
+  "name": "dashborad_web-v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sokasaki/E-Commerce-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sokasaki/E-Commerce-/issues"
+  },
+  "homepage": "https://github.com/sokasaki/E-Commerce-#readme",
+  "dependencies": {
+    "bakong-khqr": "^1.0.20"
+  }
+}

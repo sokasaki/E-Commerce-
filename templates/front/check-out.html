@@ -5,327 +5,527 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - STYLELESS</title>
-    <!-- Bootstrap 5 CSS via CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='final_project/image5.png') }}">
+    <style>
+        :root {
+            --brand-dark: #111111;
+            --brand-gray: #717171;
+            --brand-light: #F5F5F5;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-heading: 'Outfit', sans-serif;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            background-color: #ffffff;
+            font-family: var(--font-main);
+            color: var(--brand-dark);
+        }
+
+        .checkout-container {
+            padding-top: 120px;
+            padding-bottom: 100px;
+        }
+
+        .checkout-header {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 50px;
+            letter-spacing: -1.5px;
+        }
+
+        /* Card Styling */
+        .checkout-card {
+            background: var(--brand-light);
+            border-radius: 24px;
+            padding: 40px;
+            border: none;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            font-size: 1.2rem;
+            color: var(--brand-dark);
+        }
+
+        /* Form Styling */
+        .form-label {
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--brand-gray);
+            margin-bottom: 10px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--brand-dark);
+            box-shadow: none;
+        }
+
+        /* Order Summary */
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-img {
+            width: 70px;
+            aspect-ratio: 1/1.2;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .summary-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .final-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .btn-place-order {
+            background: var(--brand-dark);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            padding: 18px;
+            width: 100%;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 30px;
+            transition: var(--transition);
+        }
+
+        .btn-place-order:hover {
+            background: #333;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Success Modal */
+        .modal-content {
+            border-radius: 24px;
+            border: none;
+            padding: 20px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #f0fff4;
+            color: #22c55e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 20px;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                padding-top: 100px;
+            }
+            .checkout-header {
+                font-size: 2.2rem;
+                margin-bottom: 30px;
+            }
+            .checkout-card {
+                padding: 25px;
+            }
+            .section-title {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Header (reuse your main navbar if needed) -->
     {% include 'front/header.html' %}
 
-    <!-- Checkout Banner -->
-    <!-- <div class="container-fluid shop-banner-bg py-5 mt-5">
-        <div class="container text-center py-5">
-            <h1 class="display-4 fw-bold text-white mb-4">Checkout</h1>
-            <p class="lead text-white-50 mb-4">Complete your order and get ready to unleash your style!</p>
-        </div>
-    </div> -->
-
     <!-- Success Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="successModalLabel">
-                        <i class="fa fa-check-circle me-2"></i>Order Placed Successfully!
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center py-4">
-                    <div class="mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
-                            class="bi bi-check-circle text-success" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                            <path
-                                d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
-                        </svg>
+            <div class="modal-content text-center">
+                <div class="modal-body py-5">
+                    <div class="success-icon">
+                        <i class="fa fa-check"></i>
                     </div>
-                    <h4 class="mb-3">Thank You for Your Order!</h4>
-                    <p class="text-muted mb-0">Your order has been successfully placed.</p>
-                    <p class="text-muted">You will receive a confirmation email shortly.</p>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <a href="{{ url_for('shop') }}" class="btn btn-primary">Continue Shopping</a>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <h2 class="fw-bold mb-3">Order Confirmed!</h2>
+                    <p class="text-muted mb-4">Thank you for your purchase. We've received your order and will start processing it right away.</p>
+                    <a href="{{ url_for('profile') }}" class="btn btn-dark rounded-pill px-5 py-3 fw-bold">View My Orders</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Checkout Form & Order Summary -->
-    <div class="container py-5" style="margin-top: 50px;">
-        <div class="row g-5">
-            <!-- Order Summary -->
-            <div class="col-lg-5 order-lg-2">
-                <div class="row">
-                    <div class="card shadow-sm ">
-                        <div class="card-header bg-light fw-bold">Order Summary</div>
-                        <div class="card-body p-4">
-                            <h5 class="fw-bold mb-4 text-center">Your Order</h5>
+    <main class="checkout-container">
+        <div class="container">
+            <h1 class="checkout-header text-center">Checkout</h1>
 
-                            <!-- Empty cart message -->
-                            <div id="emptyCheckoutMessage" class="text-center py-4 d-none">
-                                <p class="text-muted">Your cart is empty.</p>
-                                <a href="{{ url_for('shop') }}" class="btn btn-primary mt-2">Go Shopping</a>
-                            </div>
-
-                            <!-- Order items container -->
-                            <div id="orderItemsContainer">
-                                <div class="order-items mb-3" id="checkoutOrderItems">
-                                    <!-- Items will be dynamically inserted here -->
+            <form action="{{ url_for('check') }}" method="POST" id="checkoutForm">
+                <input type="hidden" name="payment_md5" id="paymentMd5">
+                <input type="hidden" name="payment_verified" id="paymentVerified" value="0">
+                <div class="row g-5">
+                    <!-- Shipping & Payment Details -->
+                    <div class="col-lg-7">
+                        <div class="checkout-card">
+                            <h3 class="section-title"><i class="fa-solid fa-truck"></i> Shipping Address</h3>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="first_name" value="{{ customer.first_name if customer else '' }}" required>
                                 </div>
-                                <div class="order-totals">
-                                    <div class="d-flex justify-content-between align-items-center py-2">
-                                        <span class="fw-semibold">Subtotal</span>
-                                        <span class="fw-bold" id="checkoutSubtotal">$0.00</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center py-2">
-                                        <span>Shipping</span>
-                                        <span id="checkoutShipping">$5.00</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center py-2">
-                                        <span>Tax</span>
-                                        <span id="checkoutTax">$2.00</span>
-                                    </div>
-                                    <hr>
-                                    <div class="d-flex justify-content-between align-items-center py-2">
-                                        <span class="fs-5 fw-bold text-dark">Total</span>
-                                        <span class="fs-5 fw-bold text-primary" id="checkoutTotal">$0.00</span>
-                                    </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" name="last_name" value="{{ customer.last_name if customer else '' }}" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Street Address</label>
+                                    <input type="text" class="form-control" name="address" value="{{ customer.address if customer else '' }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-control" name="city" value="{{ customer.city if customer else '' }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">ZIP Code</label>
+                                    <input type="text" class="form-control" name="zip" value="{{ customer.zip_code if customer else '' }}" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Country</label>
+                                    <select class="form-select" name="country" required>
+                                        <option value="">Select Country</option>
+                                        <option value="Cambodia" {% if customer and customer.country == 'Cambodia' %}selected{% endif %}>Cambodia</option>
+                                        <option value="United States" {% if customer and customer.country == 'United States' %}selected{% endif %}>United States</option>
+                                        <option value="Thailand" {% if customer and customer.country == 'Thailand' %}selected{% endif %}>Thailand</option>
+                                        <option value="Other" {% if customer and customer.country == 'Other' %}selected{% endif %}>Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" name="phone" value="{{ customer.phone if customer else '' }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" name="email" value="{{ customer.email if customer else '' }}" required>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-            </div>
-
-
-            <!-- Checkout Form -->
-            <div class="col-lg-7 order-lg-1">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-light fw-bold">Shipping & Payment</div>
-                    <div class="card-body">
-                        <form>
-                            <h5 class="mb-3 fw-bold">Shipping Information</h5>
-                            <div class="row mb-3">
-                                <div class="col-md-6 mb-3 mb-md-0">
-                                    <label for="firstName" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="lastName" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="address" required>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6 mb-3 mb-md-0">
-                                    <label for="city" class="form-label">City</label>
-                                    <input type="text" class="form-control" id="city" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="zip" class="form-label">ZIP Code</label>
-                                    <input type="text" class="form-control" id="zip" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="country" class="form-label">Country</label>
-                                <select class="form-select" id="country" required>
-                                    <option value="">Select Country</option>
-                                    <option value="us">United States</option>
-                                    <option value="uk">United Kingdom</option>
-                                    <option value="th">Thailand</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" id="phone" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email" required>
-                            </div>
-                            <hr>
-                            <h5 class="mb-3 fw-bold">Payment Method</h5>
-                            <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard"
-                                        checked>
-                                    <label class="form-check-label" for="creditCard">
-                                        Credit Card
+                        <div class="checkout-card">
+                            <h3 class="section-title"><i class="fa-solid fa-credit-card"></i> Payment Method</h3>
+                            
+                            <div class="d-flex flex-column gap-3">
+                                <!-- Bakong KHQR Option -->
+                                <div class="form-check p-3 border rounded-3 d-flex align-items-center bg-white" style="cursor: pointer;" onclick="document.getElementById('bakongPay').click()">
+                                    <input class="form-check-input ms-0 me-3" type="radio" name="paymentMethod" id="bakongPay" value="bakong" checked>
+                                    <label class="form-check-label fw-bold d-flex flex-wrap align-items-center gap-2" for="bakongPay">
+                                        Pay with Bakong KHQR
+                                        <span class="badge bg-danger rounded-pill small" style="font-size: 0.6rem;">Recommended</span>
                                     </label>
+                                    <img src="https://bakong.nbc.org.kh/images/logo_bakong.png" alt="Bakong" class="ms-auto" style="height: 25px;">
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="paymentMethod" id="paypal">
-                                    <label class="form-check-label" for="paypal">
-                                        PayPal
+                                
+                                <!-- INLINE QR CONTAINER -->
+                                <div id="inlineQrContainer" class="text-center p-4 border rounded-3" style="display: none; background: #f8fafc; border-top: none; margin-top: -15px;">
+                                    <div id="qrLoading" class="text-muted small">
+                                        <div class="spinner-border spinner-border-sm text-danger me-2"></div> Generating QR...
+                                    </div>
+                                    <img id="qrImage" src="" alt="KHQR" style="display:none; width: 200px; margin: 0 auto; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.05);" class="mb-3 bg-white p-2">
+                                    <div class="small text-muted mt-2 mb-3 d-md-none"><i class="fa fa-info-circle"></i> Tip: Take a screenshot to scan in your banking app</div>
+                                    <div id="inline-payment-status" class="small fw-bold text-primary">
+                                        <div class="spinner-border spinner-border-sm me-2"></div> Waiting for scan...
+                                    </div>
+                                    <div id="inline-payment-debug" class="small text-start mt-3 p-3 rounded-3 bg-white border" style="display:none; white-space: pre-wrap; word-break: break-word;"></div>
+                                </div>
+
+                                <!-- Credit Card Option -->
+                                <div class="form-check p-3 border rounded-3 d-flex align-items-center opacity-75">
+                                    <input class="form-check-input ms-0 me-3" type="radio" name="paymentMethod" id="creditCard" value="card">
+                                    <label class="form-check-label fw-bold" for="creditCard">
+                                        Credit / Debit Card
                                     </label>
+                                    <div class="ms-auto fs-3 text-muted opacity-50">
+                                        <i class="fa-brands fa-cc-visa me-2"></i>
+                                        <i class="fa-brands fa-cc-mastercard"></i>
+                                    </div>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="paymentMethod" id="cod">
-                                    <label class="form-check-label" for="cod">
+
+                                <!-- Cash on Delivery Option -->
+                                <div class="form-check p-3 border rounded-3 d-flex align-items-center">
+                                    <input class="form-check-input ms-0 me-3" type="radio" name="paymentMethod" id="codPay" value="cod">
+                                    <label class="form-check-label fw-bold" for="codPay">
                                         Cash on Delivery
                                     </label>
+                                    <i class="fa-solid fa-hand-holding-dollar ms-auto fs-3 text-muted opacity-50"></i>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="cardNumber" class="form-label">Card Number</label>
-                                <input type="text" class="form-control" id="cardNumber" required>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6 mb-3 mb-md-0">
-                                    <label for="cardExpiry" class="form-label">Expiry Date</label>
-                                    <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY"
-                                        required>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary (Vue Managed) -->
+                    <div class="col-lg-5">
+                        <div class="checkout-card sticky-lg-top" style="top: 120px;">
+                            <h3 class="section-title">Order Summary</h3>
+                            
+                            <div id="checkoutOrderItems">
+                                <div v-for="item in cart" :key="item.id" class="summary-item">
+                                    <div class="summary-img">
+                                        <img :src="item.image" :alt="item.title">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="fw-bold mb-1">[[ item.title ]]</h6>
+                                        <p class="text-muted small mb-0">Qty: [[ item.quantity ]] × $[[ item.price.toFixed(2) ]]</p>
+                                    </div>
+                                    <div class="fw-bold">$[[ (item.price * item.quantity).toFixed(2) ]]</div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="cardCVC" class="form-label">CVC</label>
-                                    <input type="text" class="form-control" id="cardCVC" required>
+                            </div>
+
+                            <div class="mt-4 pt-2">
+                                <div class="total-row">
+                                    <span class="text-muted">Subtotal</span>
+                                    <span class="fw-bold">$[[ cartTotal.toFixed(2) ]]</span>
+                                </div>
+                                <div class="total-row">
+                                    <span class="text-muted">Shipping Fee</span>
+                                    <span class="fw-bold">$[[ (cart.length > 0 ? 5.00 : 0.00).toFixed(2) ]]</span>
+                                </div>
+                                <div class="total-row">
+                                    <span class="text-muted">Estimated Tax</span>
+                                    <span class="fw-bold">$[[ (cart.length > 0 ? 2.00 : 0.00).toFixed(2) ]]</span>
+                                </div>
+                                
+                                <div class="total-row final-total">
+                                    <span>Total Amount</span>
+                                    <span>$[[ (cart.length > 0 ? cartTotal + 7.00 : 0.00).toFixed(2) ]]</span>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100 py-2 mt-3">Place Order</button>
-                        </form>
+
+                            <button type="submit" class="btn-place-order" id="submitBtn" :disabled="cart.length === 0">Complete Purchase</button>
+                            
+                            <p class="text-center text-muted small mt-4">
+                                <i class="fa-solid fa-lock me-2"></i> Your payment is secured with 256-bit encryption
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
-    </div>
+    </main>
 
-    <!-- Bootstrap 5 JS via CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
-    <!-- Your custom JS -->
+    {% include 'front/footer.html' %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
     <script>
-        // Function to render checkout order summary
-        function renderCheckoutSummary() {
-            const orderItemsDiv = document.getElementById('checkoutOrderItems');
-            const emptyMessage = document.getElementById('emptyCheckoutMessage');
-            const orderContainer = document.getElementById('orderItemsContainer');
-
-            if (!cart || cart.length === 0) {
-                emptyMessage.classList.remove('d-none');
-                orderContainer.classList.add('d-none');
-                return;
-            }
-
-            emptyMessage.classList.add('d-none');
-            orderContainer.classList.remove('d-none');
-
-            let itemsHtml = '';
-            let subtotal = 0;
-
-            cart.forEach((item) => {
-                const quantity = item.quantity || 1;
-                const itemTotal = item.price * quantity;
-                subtotal += itemTotal;
-
-                itemsHtml += `
-                    <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
-                        <img src="${item.image}" alt="${item.title}"
-                            style="width:56px; height:56px; object-fit:cover; border-radius:10px; margin-right:16px;">
-                        <div class="flex-grow-1">
-                            <div class="fw-semibold">${item.title}</div>
-                            <div class="text-muted small">Qty: ${quantity}</div>
-                        </div>
-                        <div class="fw-bold fs-6">$${itemTotal.toFixed(2)}</div>
-                    </div>
-                `;
-            });
-
-            orderItemsDiv.innerHTML = itemsHtml;
-
-            // Update totals
-            const shipping = subtotal > 0 ? 5.00 : 0;
-            const tax = subtotal > 0 ? 2.00 : 0;
-            const total = subtotal + shipping + tax;
-
-            document.getElementById('checkoutSubtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('checkoutShipping').textContent = `$${shipping.toFixed(2)}`;
-            document.getElementById('checkoutTax').textContent = `$${tax.toFixed(2)}`;
-            document.getElementById('checkoutTotal').textContent = `$${total.toFixed(2)}`;
-        }
-
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function () {
-            renderCheckoutSummary();
+            const checkoutForm = document.getElementById('checkoutForm');
+            if (!checkoutForm) return;
 
-            // Handle form submission
-            const checkoutForm = document.querySelector('form');
             checkoutForm.addEventListener('submit', function (e) {
                 e.preventDefault();
 
-                // Validate form
-                if (checkoutForm.checkValidity()) {
-                    // Calculate totals
-                    const subtotal = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-                    const shipping = 5.00;
-                    const tax = 2.00;
-                    const total = subtotal + shipping + tax;
+                const submitBtn = checkoutForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerText;
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Processing Order...';
 
-                    // Create order object
-                    const orderData = {
-                        id: Date.now(),
-                        date: new Date().toISOString(),
-                        items: [...cart],
-                        customerInfo: {
-                            firstName: document.getElementById('firstName').value,
-                            lastName: document.getElementById('lastName').value,
-                            email: document.getElementById('email').value,
-                            phone: document.getElementById('phone').value,
-                            address: document.getElementById('address').value,
-                            city: document.getElementById('city').value,
-                            zip: document.getElementById('zip').value,
-                            country: document.getElementById('country').value
-                        },
-                        paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').id,
-                        subtotal: subtotal,
-                        shipping: shipping,
-                        tax: tax,
-                        total: total,
-                        status: 'Processing'
-                    };
+                const formData = new FormData(checkoutForm);
+                fetch(checkoutForm.action, {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success' || data.message) {
+                        // Clear local storage cart cache
+                        localStorage.removeItem('cart');
+                        
+                        // Standard Success Modal
+                        const modalTitle = document.querySelector('#successModal h2');
+                        const modalText = document.querySelector('#successModal p');
+                        const modalBtn = document.querySelector('#successModal .btn');
+                        const modalIcon = document.querySelector('#successModal .success-icon i');
 
-                    // Save order to localStorage
-                    let orders = JSON.parse(localStorage.getItem('orders')) || [];
-                    orders.unshift(orderData); // Add to beginning
-                    localStorage.setItem('orders', JSON.stringify(orders));
+                        modalTitle.innerText = 'Order Confirmed!';
+                        modalText.innerText = "Thank you for your purchase. We've received your order and will start processing it right away.";
+                        modalBtn.style.display = 'inline-block';
+                        modalIcon.className = 'fa fa-check';
 
-                    // Show success modal
-                    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-                    successModal.show();
-
-                    // Clear cart after showing modal
-                    cart = [];
-                    saveCart();
-
-                    // Reset form
-                    checkoutForm.reset();
-
-                    // Update displays
-                    renderCheckoutSummary();
-                    displayCart();
-                } else {
-                    // Show validation errors
-                    checkoutForm.classList.add('was-validated');
-                }
+                        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                        successModal.show();
+                        
+                        setTimeout(() => {
+                            window.location.href = data.redirect || "{{ url_for('profile') }}";
+                        }, 2000);
+                    } else {
+                        alert(data.error || 'Checkout failed. Please check your details.');
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalText;
+                    }
+                })
+                .catch(err => {
+                    console.error('Checkout Error:', err);
+                    alert('An error occurred during checkout.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalText;
+                });
             });
+
+            // Inline QR Logic
+            const bakongRadio = document.getElementById('bakongPay');
+            const otherRadios = document.querySelectorAll('input[name="paymentMethod"]:not(#bakongPay)');
+            const qrContainer = document.getElementById('inlineQrContainer');
+            const qrImage = document.getElementById('qrImage');
+            const qrLoading = document.getElementById('qrLoading');
+            const paymentStatus = document.getElementById('inline-payment-status');
+            const paymentDebug = document.getElementById('inline-payment-debug');
+            const paymentMd5Input = document.getElementById('paymentMd5');
+            const paymentVerifiedInput = document.getElementById('paymentVerified');
+            let pollingInterval = null;
+
+            function updateSubmitButtonState() {
+                const isBakong = bakongRadio.checked;
+                const isVerified = paymentVerifiedInput.value === '1';
+                
+                if (isBakong) {
+                    if (isVerified) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = 'Payment Verified - Completing...';
+                    } else {
+                        submitBtn.disabled = true;
+                        submitBtn.innerText = 'Waiting for Bakong Payment...';
+                        submitBtn.style.opacity = '0.5';
+                    }
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Complete Purchase';
+                    submitBtn.style.opacity = '1';
+                }
+            }
+
+            function loadQR() {
+                updateSubmitButtonState();
+                qrContainer.style.display = 'block';
+                qrLoading.style.display = 'block';
+                qrImage.style.display = 'none';
+                paymentStatus.style.display = 'none';
+                paymentDebug.style.display = 'none';
+                paymentDebug.textContent = '';
+                paymentMd5Input.value = '';
+                paymentVerifiedInput.value = '0';
+                if(pollingInterval) clearInterval(pollingInterval);
+                
+                fetch('/api/generate_qr', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.qr_base64) {
+                        paymentMd5Input.value = data.md5 || '';
+                        qrImage.src = 'data:image/png;base64,' + data.qr_base64;
+                        qrImage.style.display = 'block';
+                        qrLoading.style.display = 'none';
+                        paymentStatus.style.display = 'block';
+                        paymentStatus.innerHTML = '<div class="spinner-border spinner-border-sm me-2"></div> Waiting for scan...';
+                        
+                        async function checkPayment() {
+                            try {
+                                const res = await fetch('/check-payment', {
+                                    method: 'POST',
+                                    headers: {'Content-Type': 'application/json'},
+                                    body: JSON.stringify({md5: data.md5})
+                                });
+                                const resData = await res.json();
+                                
+                                if(resData.responseCode === 0 || resData.responseCode === "0") {
+                                    // DOUBLE CHECK: Ensure it's not actually an error message hidden in responseCode 0
+                                    if (resData.message && resData.message.toLowerCase().includes('not found')) {
+                                        return false;
+                                    }
+
+                                    paymentVerifiedInput.value = '1';
+                                    updateSubmitButtonState();
+                                    paymentStatus.innerHTML = '<span class="text-success"><i class="fa fa-check-circle fs-5 me-1"></i> Payment Successful!</span>';
+                                    
+                                    setTimeout(() => {
+                                        checkoutForm.requestSubmit();
+                                    }, 1000);
+                                    return true;
+                                }
+
+                                const statusMessage = resData.message || resData.error || `Waiting for payment...`;
+                                paymentStatus.innerHTML = `<span class="text-warning"><i class="fa fa-clock fs-5 me-1"></i> ${statusMessage}</span>`;
+                            } catch(e) {
+                                console.error("Polling error:", e);
+                            }
+                            return false;
+                        }
+
+                        pollingInterval = setInterval(async () => {
+                            const isPaid = await checkPayment();
+                            if (isPaid) clearInterval(pollingInterval);
+                        }, 3000);
+                    }
+                });
+            }
+
+            bakongRadio.addEventListener('change', loadQR);
+            otherRadios.forEach(r => r.addEventListener('change', () => {
+                qrContainer.style.display = 'none';
+                paymentMd5Input.value = '';
+                paymentVerifiedInput.value = '0';
+                if(pollingInterval) clearInterval(pollingInterval);
+                updateSubmitButtonState();
+            }));
+
+            // Initial Load
+            updateSubmitButtonState();
+            if (bakongRadio.checked) loadQR();
         });
-    </script>
-
-    <!-- Footer (reuse your main footer if needed) -->
-    {% include 'front/footer.html' %}
+</script>
 </body>
-
 </html>

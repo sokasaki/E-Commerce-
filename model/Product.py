@@ -16,14 +16,52 @@ class Product(db.Model):
     
     # Relationship to Category
     category = db.relationship('Category', backref='products', lazy=True)
+    
+    # Relationship to ProductImages
+    images = db.relationship('ProductImage', back_populates='product', lazy='dynamic', cascade='all, delete-orphan')
+
+    def get_primary_image(self):
+        """Get the primary product image or first image or fallback to image_url"""
+        from model.ProductImage import ProductImage
+        
+        # Try to get primary image from ProductImage table
+        primary = ProductImage.query.filter_by(
+            product_id=self.id, 
+            is_primary=True
+        ).first()
+        
+        if primary:
+            return primary.image_url
+        
+        # Fallback to first image
+        first_img = ProductImage.query.filter_by(product_id=self.id).order_by(ProductImage.display_order).first()
+        if first_img:
+            return first_img.image_url
+        
+        # Fallback to legacy image_url field
+        return self.image_url
+    
+    def get_all_images(self):
+        """Get all product images ordered by display_order"""
+        from model.ProductImage import ProductImage
+        return ProductImage.query.filter_by(product_id=self.id).order_by(ProductImage.display_order).all()
+    
+    def get_image_count(self):
+        """Get total number of images for this product"""
+        from model.ProductImage import ProductImage
+        return ProductImage.query.filter_by(product_id=self.id).count()
+
 
     def to_dict(self):
         """Convert to format matching frontend templates"""
         from flask import url_for
         from model.Category import Category
         
+        # Get primary image (prioritize ProductImage table, fallback to image_url)
+        primary_image = self.get_primary_image()
+        
         # Handle image URL
-        image_url = self.image_url
+        image_url = primary_image
         if image_url:
             if image_url.startswith(('http://', 'https://')):
                 # External URL - use as is

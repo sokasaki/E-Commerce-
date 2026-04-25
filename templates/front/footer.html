@@ -1,64 +1,153 @@
-<footer class="container-fluid py-5 footer-bg">
+<!-- Modern Footer consistent with Nextgen aesthetic -->
+<footer class="footer-modern bg-white pt-5 pb-4 border-top mt-5 d-none d-md-block">
     <div class="container">
-        <div class="row">
-            <div class="col-md-3 col-sm-12 mb-4">
-                <h2 class="fw-bold">STYLELESS</h2>
-                <p class="text-muted small mt-3">Your destination for the latest fashion trends.</p>
+        <div class="row g-5">
+            <!-- Brand & Description -->
+            <div class="col-lg-4">
+                <a class="navbar-brand text-dark fw-bold fs-3" href="{{ url_for('home') }}" style="font-family: 'Outfit', sans-serif; letter-spacing: -1px;">STYLELESS</a>
+                <p class="text-muted mt-3 mb-4" style="max-width: 300px; line-height: 1.6;">
+                    Elevating your everyday wardrobe with premium materials and timeless silhouettes. Join the movement towards effortless style.
+                </p>
+                <div class="social-links d-flex gap-3">
+                    <a href="#" class="social-icon-btn"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="social-icon-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon-btn"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="social-icon-btn"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
             </div>
-            <div class="col-md-3 col-sm-12 mb-4">
-                <ul class="list-unstyled">
-                    <li class="fw-bold fs-5 mb-3">Shop</li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-dark">My Account</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Login</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Wishlist</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Cart</a></li>
+
+            <!-- Links Columns -->
+            <div class="col-lg-2 col-md-4">
+                <h6 class="fw-bold text-uppercase mb-4" style="font-size: 0.8rem; letter-spacing: 2px;">Company</h6>
+                <ul class="list-unstyled footer-links">
+                    <li class="mb-3"><a href="{{ url_for('about') }}">About Us</a></li>
+                    <li class="mb-3"><a href="#">Our Ethics</a></li>
+                    <li class="mb-3"><a href="#">Sustainability</a></li>
+                    <li class="mb-3"><a href="#">Careers</a></li>
                 </ul>
             </div>
-            <div class="col-md-3 col-sm-12 mb-4">
-                <ul class="list-unstyled">
-                    <li class="fw-bold fs-5 mb-3">Information</li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Shipping Policy</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Returns & Refunds</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Cookies Policy</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Frequently Asked
-                            Questions</a></li>
+            <div class="col-lg-2 col-md-4">
+                <h6 class="fw-bold text-uppercase mb-4" style="font-size: 0.8rem; letter-spacing: 2px;">Support</h6>
+                <ul class="list-unstyled footer-links">
+                    <li class="mb-3"><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                    <li class="mb-3"><a href="{{ url_for('faq') }}">FAQs</a></li>
+                    <li class="mb-3"><a href="#">Shipping Details</a></li>
+                    <li class="mb-3"><a href="#">Returns & Exchanges</a></li>
                 </ul>
             </div>
-            <div class="col-md-3 col-sm-12 mb-4">
-                <ul class="list-unstyled">
-                    <li class="fw-bold fs-5 mb-3">Company</li>
-                    <li class="mb-2"><a href="{{ url_for('about') }}" class="text-decoration-none text-dark">About
-                            Us</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Privacy Policy</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Terms & Conditions</a></li>
-                    <li class="mb-2"><a href="{{ url_for('contact') }}" class="text-decoration-none text-dark">Contact
-                            Us</a></li>
+            <div class="col-lg-2 col-md-4">
+                <h6 class="fw-bold text-uppercase mb-4" style="font-size: 0.8rem; letter-spacing: 2px;">Legal</h6>
+                <ul class="list-unstyled footer-links">
+                    <li class="mb-3"><a href="#">Privacy Policy</a></li>
+                    <li class="mb-3"><a href="#">Terms of Service</a></li>
+                    <li class="mb-3"><a href="#">Cookie Policy</a></li>
+                    <li class="mb-3"><a href="#">Accessability</a></li>
                 </ul>
+            </div>
+            <div class="col-lg-2 col-md-12">
+                <h6 class="fw-bold text-uppercase mb-4" style="font-size: 0.8rem; letter-spacing: 2px;">Resources</h6>
+                <ul class="list-unstyled footer-links">
+                    <li class="mb-3"><a href="#">Style Guide</a></li>
+                    <li class="mb-3"><a href="#">Size Manual</a></li>
+                    <li class="mb-3"><a href="#">Blog - Journal</a></li>
+                    <li class="mb-3"><a href="#">Media Kit</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="my-5 border-light">
+
+        <!-- Bottom Footer -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
+            <p class="text-muted small mb-0">&copy; 2025 STYLELESS Global Inc. All Rights Reserved.</p>
+            <div class="payment-methods d-flex gap-3 text-muted opacity-50 fs-2">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-cc-paypal"></i>
+                <i class="fa-brands fa-cc-apple-pay"></i>
+                <i class="fa-brands fa-cc-google-pay"></i>
             </div>
         </div>
     </div>
 </footer>
-<div class="container-fluid copyright-bg text-white py-3">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6 text-center text-md-start mb-0 mb-md-0">
-                <h5 class="mb-0">BE IN TOUCH WITH US:</h5>
-            </div>
-            <div class="col-md-6 text-center text-md-end social">
-                <a href="https://facebook.com" target="_blank" class="text-decoration-none me-3"><i
-                        class="fa-brands fa-facebook fs-4"></i></a>
-                <a href="https://instagram.com" target="_blank" class="text-decoration-none me-3"><i
-                        class="fa-brands fa-instagram fs-4"></i></a>
-                <a href="https://twitter.com" target="_blank" class="text-decoration-none me-3"><i
-                        class="fa-brands fa-x-twitter fs-4"></i></a>
-                <a href="https://pinterest.com" target="_blank" class="text-decoration-none"><i
-                        class="fa-brands fa-pinterest fs-4"></i></a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 text-center text-muted small">
-                <p>&copy; 2025 STYLELESS. All rights reserved.</p>
-            </div>
-        </div>
-    </div>
+
+<style>
+    .footer-links a {
+        color: #717171;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+    .footer-links a:hover {
+        color: #111;
+        padding-left: 5px;
+    }
+    .social-icon-btn {
+        width: 40px;
+        height: 40px;
+        border: 1px solid #eeeeee;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #111;
+        transition: all 0.3s ease;
+    }
+    .social-icon-btn:hover {
+        background: #111;
+        color: white;
+        transform: translateY(-3px);
+    }
+    .mobile-bottom-nav {
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+    }
+    .mobile-nav-item {
+        color: #a0a0a0 !important;
+        transition: all 0.3s ease;
+    }
+    .mobile-nav-item.active, .mobile-nav-item:hover {
+        color: #111 !important;
+    }
+    /* Hide top navbar cart on mobile if using bottom nav */
+    @media (max-width: 768px) {
+        .navbar .fa-shopping-bag, .navbar .badge {
+            display: none !important;
+        }
+    }
+</style>
+
+{% if request.endpoint != 'check' %}
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-bottom-nav d-md-none bg-white border-top position-fixed bottom-0 w-100 d-flex justify-content-around py-2" style="z-index: 1040;">
+    <a href="{{ url_for('home') }}" class="text-center text-decoration-none p-2 w-100 mobile-nav-item {% if request.endpoint == 'home' %}active{% endif %}">
+        <i class="fa-solid fa-house fs-5 mb-1"></i>
+        <div style="font-size: 0.7rem; font-weight: 600;">Home</div>
+    </a>
+    <a href="{{ url_for('shop') }}" class="text-center text-decoration-none p-2 w-100 mobile-nav-item {% if request.endpoint == 'shop' %}active{% endif %}">
+        <i class="fa-solid fa-store fs-5 mb-1"></i>
+        <div style="font-size: 0.7rem; font-weight: 600;">Shop</div>
+    </a>
+    <a href="#offcanvasCart" data-bs-toggle="offcanvas" role="button" class="text-center text-decoration-none p-2 w-100 position-relative mobile-nav-item">
+        <i class="fa-solid fa-cart-shopping fs-5 mb-1"></i>
+        <span class="position-absolute top-0 start-50 translate-middle-x badge rounded-pill bg-dark" style="font-size: 0.55rem; margin-top: 5px; margin-left: 10px;">
+            [[ cartCount ]]
+        </span>
+        <div style="font-size: 0.7rem; font-weight: 600;">Cart</div>
+    </a>
+    {% if session.get('user_id') %}
+    <a href="{{ url_for('profile') }}" class="text-center text-decoration-none p-2 w-100 mobile-nav-item {% if request.endpoint == 'profile' %}active{% endif %}">
+        <i class="fa-regular fa-user fs-5 mb-1"></i>
+        <div style="font-size: 0.7rem; font-weight: 600;">Profile</div>
+    </a>
+    {% else %}
+    <a href="{{ url_for('login') }}" class="text-center text-decoration-none p-2 w-100 mobile-nav-item {% if request.endpoint in ['login', 'register'] %}active{% endif %}">
+        <i class="fa-regular fa-user fs-5 mb-1"></i>
+        <div style="font-size: 0.7rem; font-weight: 600;">Login</div>
+    </a>
+    {% endif %}
+</nav>
+
+<!-- padding to prevent content from being hidden behind mobile nav -->
+<div class="d-md-none pb-5 mb-4"></div>
+{% endif %}
 </div>

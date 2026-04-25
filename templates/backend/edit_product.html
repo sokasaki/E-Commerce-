@@ -55,19 +55,41 @@
                         <form method="POST" action="{{ url_for('edit_product', pro_id=product.id) }}"
                             enctype="multipart/form-data">
                             <input type="hidden" name="product_id" value="{{ product.id }}" />
+
                             <div class="row mb-3">
-                                <div class="col-md-12 d-flex align-items-center justify-content-center"
-                                    style="min-height: 120px;">
-                                    <div class="w-100 d-flex align-items-center justify-content-center">
-                                        <div id="imagePreviewWrapper"
-                                            style="display: inline-block; border: 1px solid #ddd; border-radius: 8px; padding: 2px; background: #fff; max-width: 220px; max-height: 350px; overflow: hidden;">
-                                            <img id="imagePreview"
-                                                src="{{ url_for('static', filename='uploads/products/' ~ product.image_url) if product.image_url else url_for('static', filename='uploads/no_img.jpg') }}"
-                                                alt="Image Preview"
-                                                style="max-width: 100%; max-height: 100%; border-radius: 8px; display: block; margin: 0 auto;"
-                                                onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/error-img.jpg') }}';" />
-                                            <input type="hidden" name="old_image" value="{{ product.image_url }}" />
+                                <div class="col-md-12">
+                                    <label class="form-label">Existing Product Images</label>
+                                    <div class="image-preview-container d-flex flex-wrap gap-2 mb-3 justify-content-center"
+                                        id="existingImagesContainer">
+                                        {% set product_images = product.get_all_images() %}
+                                        {% if product_images %}
+                                        {% for img in product_images %}
+                                        <div class="image-preview-item" data-image-id="{{ img.id }}">
+                                            <img src="{{ url_for('static', filename='uploads/products/' ~ img.image_url) }}"
+                                                alt="Product Image"
+                                                onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/error-img.jpg') }}';">
+                                            {% if img.is_primary %}
+                                            <div class="primary-badge">PRIMARY</div>
+                                            {% endif %}
+                                            <button type="button" class="remove-btn"
+                                                onclick="markForDeletion({{ img.id }})" title="Remove">
+                                                <i class="fas fa-times"></i>
+                                            </button>
                                         </div>
+                                        {% endfor %}
+                                        {% else %}
+                                        <p class="text-muted">No images uploaded yet.</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label">Add New Images</label>
+                                    <div class="image-preview-container d-flex flex-wrap gap-2 mb-3 justify-content-center"
+                                        id="newImagesContainer">
+                                        <!-- New image previews will appear here -->
                                     </div>
                                 </div>
                             </div>
@@ -133,15 +155,17 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-12">
-                                    <label for="image_url" class="form-label">Product Image</label>
+                                    <label for="images" class="form-label">Upload More Images</label>
                                     <div id="dropZone" class="dropzone-area mb-2"
-                                        onclick="document.getElementById('image_url').click();"
+                                        onclick="document.getElementById('images').click();"
                                         ondragover="event.preventDefault(); this.classList.add('dragover');"
                                         ondragleave="this.classList.remove('dragover');" ondrop="handleDrop(event)">
-                                        <span id="dropZoneText">Drag & Drop or Click to Select Image</span>
-                                        <input type="file" id="image_url" name="image_url" accept="image/*"
-                                            style="display:none;" onchange="previewImageFile()">
+                                        <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                                        <span id="dropZoneText">Drag & Drop or Click to Add More Images</span>
+                                        <input type="file" id="images" name="images" accept="image/*" multiple
+                                            style="display:none;" onchange="previewNewImages()">
                                     </div>
+                                    <small class="text-muted">You can add multiple images at once.</small>
                                 </div>
 
                             </div>
@@ -178,36 +202,168 @@
             border-color: #007bff;
             background: #f0f8ff;
         }
+
+        .image-preview-item {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .image-preview-item.marked-for-deletion {
+            opacity: 0.5;
+            border-color: #dc3545;
+        }
+
+        .image-preview-item.marked-for-deletion::after {
+            content: 'DELETED';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            z-index: 10;
+        }
+
+        .image-preview-item .primary-badge {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(40, 167, 69, 0.9);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 10;
+        }
     </style>
     <script>
-        function previewImageFile() {
-            const input = document.getElementById('image_url');
-            const img = document.getElementById('imagePreview');
-            const wrapper = document.getElementById('imagePreviewWrapper');
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    wrapper.style.display = 'inline-block';
-                };
-                reader.readAsDataURL(input.files[0]);
-                document.getElementById('dropZoneText').style.display = 'none';
-            } else {
-                img.src = "{{ product.image_url if product.image_url else url_for('static', filename='uploads/no_img.jpg') }}";
-                img.style.display = 'block';
-                wrapper.style.display = 'inline-block';
-                document.getElementById('dropZoneText').style.display = '';
+        let selectedNewFiles = [];
+        let imagesToDelete = [];
+
+        function previewNewImages() {
+            const input = document.getElementById('images');
+
+            if (input.files && input.files.length > 0) {
+                selectedNewFiles = Array.from(input.files);
+                updateNewPreviews();
+                document.getElementById('dropZoneText').innerHTML = `${selectedNewFiles.length} new image(s) selected`;
             }
         }
+
+        function updateNewPreviews() {
+            const container = document.getElementById('newImagesContainer');
+            container.innerHTML = '';
+
+            selectedNewFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'image-preview-item';
+                    previewItem.innerHTML = `
+                        <img src="${e.target.result}" alt="New Image ${index + 1}">
+                        <button type="button" class="remove-btn" onclick="removeNewImage(${index})" title="Remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    container.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removeNewImage(index) {
+            selectedNewFiles.splice(index, 1);
+
+            // Update the file input
+            const dt = new DataTransfer();
+            selectedNewFiles.forEach(file => dt.items.add(file));
+            document.getElementById('images').files = dt.files;
+
+            updateNewPreviews();
+
+            if (selectedNewFiles.length === 0) {
+                document.getElementById('dropZoneText').innerHTML = 'Drag & Drop or Click to Add More Images';
+            } else {
+                document.getElementById('dropZoneText').innerHTML = `${selectedNewFiles.length} new image(s) selected`;
+            }
+        }
+
+        function markForDeletion(imageId) {
+            const imageElement = document.querySelector(`[data-image-id="${imageId}"]`);
+
+            if (imagesToDelete.includes(imageId)) {
+                // Unmark for deletion
+                imagesToDelete = imagesToDelete.filter(id => id !== imageId);
+                imageElement.classList.remove('marked-for-deletion');
+                imageElement.querySelector('.remove-btn').innerHTML = '<i class="fas fa-times"></i>';
+            } else {
+                // Mark for deletion
+                imagesToDelete.push(imageId);
+                imageElement.classList.add('marked-for-deletion');
+                imageElement.querySelector('.remove-btn').innerHTML = '<i class="fas fa-undo"></i>';
+                imageElement.querySelector('.remove-btn').title = 'Undo Delete';
+            }
+
+            // Update hidden inputs
+            updateDeleteInputs();
+        }
+
+        function updateDeleteInputs() {
+            // Remove existing delete inputs
+            document.querySelectorAll('input[name="delete_images"]').forEach(input => input.remove());
+
+            // Add new delete inputs
+            const form = document.querySelector('form');
+            imagesToDelete.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'delete_images';
+                input.value = id;
+                form.appendChild(input);
+            });
+        }
+
         function handleDrop(event) {
             event.preventDefault();
             event.currentTarget.classList.remove('dragover');
             const files = event.dataTransfer.files;
-            if (files && files[0]) {
-                const input = document.getElementById('image_url');
+            if (files && files.length > 0) {
+                const input = document.getElementById('images');
                 input.files = files;
-                previewImageFile();
+                previewNewImages();
             }
         }
     </script>

@@ -43,7 +43,7 @@ function toggleSaveProduct(btn) {
     if (index > -1) {
       savedProducts.splice(index, 1);
     }
-    showNotification("Removed from saved items", "info");
+    window.notify("Removed from saved items", "Wishlist", "info");
   } else {
     // Add to saved
     btn.classList.add("saved");
@@ -51,13 +51,13 @@ function toggleSaveProduct(btn) {
     if (!savedProducts.includes(productId)) {
       savedProducts.push(productId);
     }
-    showNotification("Saved to your wishlist", "success");
+    window.notify("Saved to your wishlist", "Wishlist", "success");
   }
 
   localStorage.setItem("savedProducts", JSON.stringify(savedProducts));
 }
 
-function showNotification(message, type = "info") {
+window.notify = function(message, title = "Info", type = "info") {
   // Remove any existing notifications
   const existingNotif = document.querySelector(".premium-notification");
   if (existingNotif) {
@@ -70,7 +70,10 @@ function showNotification(message, type = "info") {
   notification.innerHTML = `
     <div class="notification-content">
       <i class="notification-icon fas fa-${getIconForType(type)}"></i>
-      <span>${message}</span>
+      <div>
+        <div class="fw-bold small">${title}</div>
+        <div class="small opacity-75">${message}</div>
+      </div>
     </div>
   `;
 
@@ -97,6 +100,7 @@ function getIconForType(type) {
   };
   return icons[type] || "info-circle";
 }
+
 
 // Add notification styles dynamically
 const style = document.createElement("style");

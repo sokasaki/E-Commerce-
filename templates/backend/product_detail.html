@@ -131,6 +131,7 @@
 
         /* Gallery Styles */
         .thumb-container {
+            position: relative;
             width: 70px;
             height: 70px;
             min-width: 70px;
@@ -206,31 +207,45 @@
                         <div class="col-lg-6 p-4">
                             <div class="d-flex flex-column h-100">
                                 <div class="img-display-area mb-3">
+                                    {% set all_images = product.get_all_images() %}
+                                    {% if all_images %}
+                                    {% set primary_image = all_images[0] %}
+                                    <img id="mainProductImage"
+                                        src="{{ url_for('static', filename='uploads/products/' ~ primary_image.image_url) }}"
+                                        class="product-image" alt="{{ product.name }}"
+                                        onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/no_img.jpg') }}';">
+                                    {% else %}
                                     <img id="mainProductImage"
                                         src="{{ url_for('static', filename='uploads/products/' ~ product.image_url) if product.image_url else url_for('static', filename='uploads/no_img.jpg') }}"
-                                        class="product-image" alt="Product">
+                                        class="product-image" alt="{{ product.name }}">
+                                    {% endif %}
                                 </div>
 
-                                <div class="d-flex gap-3 overflow-auto pb-2 pt-3 " style="height: 110px;">
-                                    <div class=" thumb-container active "
-                                        onclick="updateMainImage(this,
-                                        '{{ url_for('static', filename='uploads/products/' ~ product.image_url) if product.image_url else url_for('static', filename='uploads/no_img.jpg') }}')">
-                                        <img
-                                            src="{{ url_for('static', filename='uploads/products/' ~ product.image_url) if product.image_url else url_for('static', filename='uploads/no_img.jpg') }}">
+                                <div class="d-flex gap-3 overflow-auto pb-2 pt-3" style="height: 110px;">
+                                    {% if all_images %}
+                                    {% for img in all_images %}
+                                    <div class="thumb-container {% if loop.first %}active{% endif %}"
+                                        onclick="updateMainImage(this, '{{ url_for('static', filename='uploads/products/' ~ img.image_url) }}')">
+                                        <img src="{{ url_for('static', filename='uploads/products/' ~ img.image_url) }}"
+                                            alt="Thumbnail {{ loop.index }}"
+                                            onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/no_img.jpg') }}';">
+                                        {% if img.is_primary %}
+                                        <span
+                                            style="position: absolute; top: 2px; left: 2px; background: #28a745; color: white; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: bold;">PRIMARY</span>
+                                        {% endif %}
                                     </div>
-
-                                    <div class="thumb-container"
-                                        onclick="updateMainImage(this, '{{ url_for('static', filename='uploads/products/placeholder1.jpg') }}')">
-                                        <img src="{{ url_for('static', filename='uploads/no_img.jpg') }}">
+                                    {% endfor %}
+                                    {% else %}
+                                    <!-- Fallback to legacy image_url if no images in ProductImage table -->
+                                    <div class="thumb-container active"
+                                        onclick="updateMainImage(this, '{{ url_for('static', filename='uploads/products/' ~ product.image_url) if product.image_url else url_for('static', filename='uploads/no_img.jpg') }}')">
+                                        <img src="{{ url_for('static', filename='uploads/products/' ~ product.image_url) if product.image_url else url_for('static', filename='uploads/no_img.jpg') }}"
+                                            alt="Product Image">
                                     </div>
-
-                                    <div class="thumb-container"
-                                        onclick="updateMainImage(this, '{{ url_for('static', filename='uploads/products/placeholder2.jpg') }}')">
-                                        <img src="{{ url_for('static', filename='uploads/no_img.jpg') }}">
-                                    </div>
+                                    {% endif %}
 
                                     <a href="{{ url_for('edit_product_page', id=product.id) }}"
-                                        class="thumb-container add-image-placeholder">
+                                        class="thumb-container add-image-placeholder" title="Add or manage images">
                                         <i class="fas fa-plus text-muted"></i>
                                     </a>
                                 </div>
@@ -291,6 +306,19 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateMainImage(thumbnailElement, imageUrl) {
+            // Update the main image
+            const mainImage = document.getElementById('mainProductImage');
+            mainImage.src = imageUrl;
+
+            // Update active state on thumbnails
+            document.querySelectorAll('.thumb-container').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            thumbnailElement.classList.add('active');
+        }
+    </script>
 </body>
 
 </html>

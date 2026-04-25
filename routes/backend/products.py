@@ -5,6 +5,7 @@ from app import app, db
 from sqlalchemy import text
 from sqlalchemy.orm import joinedload
 from model.Product import Product
+from model.ProductImage import ProductImage
 from model.Category import Category
 from pathlib import Path
 import os
@@ -27,21 +28,20 @@ def add_product_page():
 
 @app.post('/admin/products/add')
 def add_product():
-    file = request.files['image_url']
-    filename = None
-    if file:
-        result = save_image(
-            file,
-            app.config['UPLOAD_FOLDER'],
-            app.config['ALLOWED_EXTENSIONS']
-        )
-        if isinstance(result, dict):
-            filename = result['original']
-        else:
-            filename = None
-            # Optionally handle error: result could be 'no file' or 'invalid file'
-            # return f"Image upload error: {result}", 400
-    # assert False, file
+    # Handle multiple images
+    files = request.files.getlist('images')
+    image_filenames = []
+    
+    for file in files:
+        if file and file.filename:
+            result = save_image(
+                file,
+                app.config['UPLOAD_FOLDER'],
+                app.config['ALLOWED_EXTENSIONS']
+            )
+            if isinstance(result, dict):
+                image_filenames.append(result['original'])
+    
     try:
         name = request.form.get('name')
         sku = request.form.get('sku')
@@ -49,7 +49,6 @@ def add_product():
         stock = request.form.get('stock')
         category_id = request.form.get('category_id')
         description = request.form.get('description')
-        image_url = request.form.get('image_url')
         status = request.form.get('status', 'active')
 
         product = Product(
@@ -59,11 +58,23 @@ def add_product():
             stock=int(stock),
             category_id=int(category_id),
             description=description,
-            image_url=filename,
+            image_url=image_filenames[0] if image_filenames else None,  # Keep legacy field for backward compatibility
             status=status
         )
 
         db.session.add(product)
+        db.session.flush()  # Get the product ID before adding images
+        
+        # Add all images to ProductImage table
+        for idx, filename in enumerate(image_filenames):
+            product_image = ProductImage(
+                product_id=product.id,
+                image_url=filename,
+                is_primary=(idx == 0),  # First image is primary
+                display_order=idx
+            )
+            db.session.add(product_image)
+
         db.session.commit()
         return redirect(url_for('products'))
 
@@ -83,37 +94,6 @@ def edit_product_page():
 
 @app.post('/admin/products/edit/')
 def edit_product():
-    file = request.files['image_url']
-    filename = None
-    if file:
-        result = save_image(
-            file,
-            app.config['UPLOAD_FOLDER'],
-            app.config['ALLOWED_EXTENSIONS']
-        )
-        if isinstance(result, dict):
-            filename = result['original']
-            old_image_name = request.form.get('old_image')
-            if old_image_name and old_image_name not in ['no_img.jpg', 'error-img.jpg', '', None]:
-                base_dir = Path('static/uploads/products')
-                original_path = base_dir / old_image_name
-                name, ext = os.path.splitext(old_image_name)
-                resized_path = base_dir / f"resized_{name}{ext}"
-                thumb_path = base_dir / f"thumb_{name}{ext}"
-                for img_path in [original_path, resized_path, thumb_path]:
-                    if img_path.is_file():
-                        try:
-                            img_path.unlink()
-                        except Exception as e:
-                            print(f"Warning: Could not delete {img_path}: {e}")
-        else:
-            filename = None
-            # Optionally handle error: result could be 'no file' or 'invalid file'
-            # return f"Image upload error: {result}", 400
-
-    # assert False, (Path('static/uploads/products') / old_image_name)
-
-
     product_id = request.form.get('product_id')
     if product_id is None:
         return "Product ID missing", 400
@@ -122,27 +102,71 @@ def edit_product():
     except ValueError:
         return "Invalid Product ID", 400
 
-    name = request.form.get('name')
-    sku = request.form.get('sku')
-    price = float(request.form.get('price'))
-    stock = int(request.form.get('stock'))
-    category_id = int(request.form.get('category_id'))
-    description = request.form.get('description')
-    image_url = filename
-    status = request.form.get('status', 'active')
-
     product = Product.query.get(product_id)
     if not product:
         return "Product not found", 404
-    product.name = name
-    product.sku = sku
-    product.price = price
-    product.stock = stock
-    product.category_id = category_id
-    product.description = description
-    if filename:
-        product.image_url = image_url
-    product.status = status
+    
+    # Handle multiple new images
+    files = request.files.getlist('images')
+    image_filenames = []
+    
+    for file in files:
+        if file and file.filename:
+            result = save_image(
+                file,
+                app.config['UPLOAD_FOLDER'],
+                app.config['ALLOWED_EXTENSIONS']
+            )
+            if isinstance(result, dict):
+                image_filenames.append(result['original'])
+    
+    # Handle image deletion (if delete_images parameter is sent)
+    images_to_delete = request.form.getlist('delete_images')
+    if images_to_delete:
+        for img_id in images_to_delete:
+            img = ProductImage.query.get(int(img_id))
+            if img and img.product_id == product_id:
+                # Delete physical files
+                old_image_name = img.image_url
+                if old_image_name and old_image_name not in ['no_img.jpg', 'error-img.jpg', '', None]:
+                    base_dir = Path('static/uploads/products')
+                    original_path = base_dir / old_image_name
+                    name, ext = os.path.splitext(old_image_name)
+                    resized_path = base_dir / f"resized_{name}{ext}"
+                    thumb_path = base_dir / f"thumb_{name}{ext}"
+                    for img_path in [original_path, resized_path, thumb_path]:
+                        if img_path.is_file():
+                            try:
+                                img_path.unlink()
+                            except Exception as e:
+                                print(f"Warning: Could not delete {img_path}: {e}")
+                # Delete database record
+                db.session.delete(img)
+
+    # Update product details
+    product.name = request.form.get('name')
+    product.sku = request.form.get('sku')
+    product.price = float(request.form.get('price'))
+    product.stock = int(request.form.get('stock'))
+    product.category_id = int(request.form.get('category_id'))
+    product.description = request.form.get('description')
+    product.status = request.form.get('status', 'active')
+    
+    # Update legacy image_url field if first image is available
+    if image_filenames:
+        product.image_url = image_filenames[0]
+    
+    # Add new images to ProductImage table
+    existing_count = ProductImage.query.filter_by(product_id=product_id).count()
+    for idx, filename in enumerate(image_filenames):
+        product_image = ProductImage(
+            product_id=product_id,
+            image_url=filename,
+            is_primary=(existing_count == 0 and idx == 0),  # Only set as primary if no other images exist
+            display_order=existing_count + idx
+        )
+        db.session.add(product_image)
+    
     db.session.commit()
     return redirect(url_for('products'))
 

@@ -53,17 +53,12 @@
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{ url_for('add_product') }} " enctype="multipart/form-data">
-                            <div class="row mb-3">
-                                <div class="col-md-12 d-flex align-items-center justify-content-center"
-                                    style="min-height: 120px;">
-                                    <div class="w-100 d-flex align-items-center justify-content-center">
-                                        <div id="imagePreviewWrapper"
-                                            style="display: inline-block; border: 1px solid #ddd; border-radius: 8px; padding: 2px; background: #fff; max-width: 220px; max-height: 350px; overflow: hidden;">
-                                            <img id="imagePreview" name="image_url"
-                                                src="{{ url_for('static', filename='uploads/no_img.jpg') }}"
-                                                alt="Image Preview"
-                                                style="max-width: 100%; max-height: 100%; border-radius: 8px; display: block; margin: 0 auto;" />
-                                        </div>
+                            <div class="row mb-3 text-center">
+                                <div class="col-md-12">
+                                    <label class="form-label">Product Images</label>
+                                    <div class="image-preview-container d-flex flex-wrap gap-2 mb-3 justify-content-center"
+                                        id="imagePreviewContainer">
+                                        <!-- Image previews will appear here -->
                                     </div>
                                 </div>
                             </div>
@@ -123,13 +118,17 @@
                                 <div class="row mb-3">
                                     <div class="col-md-12">
                                         <div id="dropZone" class="dropzone-area mb-2"
-                                            onclick="document.getElementById('image_url').click();"
+                                            onclick="document.getElementById('images').click();"
                                             ondragover="event.preventDefault(); this.classList.add('dragover');"
                                             ondragleave="this.classList.remove('dragover');" ondrop="handleDrop(event)">
-                                            <span id="dropZoneText">Drag & Drop or Click to Select Image</span>
-                                            <input type="file" id="image_url" name="image_url" accept="image/*"
-                                                style="display:none;" onchange="previewImageFile()">
+                                            <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                                            <span id="dropZoneText">Drag & Drop or Click to Select Images
+                                                (Multiple)</span>
+                                            <input type="file" id="images" name="images" accept="image/*" multiple
+                                                style="display:none;" onchange="previewMultipleImages()">
                                         </div>
+                                        <small class="text-muted">You can select multiple images. First image will be
+                                            the primary image.</small>
                                     </div>
 
                                 </div>
@@ -168,36 +167,113 @@
             border-color: #007bff;
             background: #f0f8ff;
         }
+
+        .image-preview-item {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .image-preview-item .primary-badge {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(40, 167, 69, 0.9);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
     </style>
     <script>
-        function previewImageFile() {
-            const input = document.getElementById('image_url');
-            const img = document.getElementById('imagePreview');
-            const wrapper = document.getElementById('imagePreviewWrapper');
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    wrapper.style.display = 'inline-block';
-                };
-                reader.readAsDataURL(input.files[0]);
-                document.getElementById('dropZoneText').style.display = 'none';
-            } else {
-                img.src = "{{ url_for('static', filename='uploads/no_img.jpg') }}";
-                img.style.display = 'block';
-                wrapper.style.display = 'inline-block';
-                document.getElementById('dropZoneText').style.display = '';
+        let selectedFiles = [];
+
+        function previewMultipleImages() {
+            const input = document.getElementById('images');
+            const container = document.getElementById('imagePreviewContainer');
+
+            if (input.files && input.files.length > 0) {
+                selectedFiles = Array.from(input.files);
+                updatePreviews();
+                document.getElementById('dropZoneText').innerHTML = `${selectedFiles.length} image(s) selected`;
             }
         }
+
+        function updatePreviews() {
+            const container = document.getElementById('imagePreviewContainer');
+            container.innerHTML = '';
+
+            selectedFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'image-preview-item';
+                    previewItem.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview ${index + 1}">
+                        ${index === 0 ? '<div class="primary-badge">PRIMARY</div>' : ''}
+                        <button type="button" class="remove-btn" onclick="removeImage(${index})" title="Remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    container.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removeImage(index) {
+            selectedFiles.splice(index, 1);
+
+            // Update the file input
+            const dt = new DataTransfer();
+            selectedFiles.forEach(file => dt.items.add(file));
+            document.getElementById('images').files = dt.files;
+
+            updatePreviews();
+
+            if (selectedFiles.length === 0) {
+                document.getElementById('dropZoneText').innerHTML = 'Drag & Drop or Click to Select Images (Multiple)';
+            } else {
+                document.getElementById('dropZoneText').innerHTML = `${selectedFiles.length} image(s) selected`;
+            }
+        }
+
         function handleDrop(event) {
             event.preventDefault();
             event.currentTarget.classList.remove('dragover');
             const files = event.dataTransfer.files;
-            if (files && files[0]) {
-                const input = document.getElementById('image_url');
+            if (files && files.length > 0) {
+                const input = document.getElementById('images');
                 input.files = files;
-                previewImageFile();
+                previewMultipleImages();
             }
         }
     </script>

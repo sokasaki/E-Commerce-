@@ -1,6 +1,8 @@
 from app import app, render_template, request
 from model.Product import Product
+from model.ProductImage import ProductImage
 from urllib.parse import unquote
+from flask import url_for
 import logging
 
 logger = logging.getLogger(__name__)
@@ -23,10 +25,32 @@ def detail():
                 pass
     
     if product:
-        product = product.to_dict()
+        product_dict = product.to_dict()
+        
+        # Get all product images
+        product_images = ProductImage.query.filter_by(product_id=product.id).order_by(ProductImage.display_order).all()
+        
+        # Build image URLs list
+        images = []
+        if product_images:
+            for img in product_images:
+                if img.image_url:
+                    if img.image_url.startswith(('http://', 'https://')):
+                        images.append(img.image_url)
+                    else:
+                        images.append(url_for('static', filename=f'uploads/products/{img.image_url}'))
+        elif product.image_url:
+            # Fallback to legacy image_url field
+            if product.image_url.startswith(('http://', 'https://')):
+                images.append(product.image_url)
+            else:
+                images.append(url_for('static', filename=f'uploads/products/{product.image_url}'))
+        
         products = Product.query.filter_by(status='active').limit(4).all()
         products = [p.to_dict() for p in products]
     else:
+        product_dict = None
+        images = []
         products = []
     
-    return render_template("front/product-detail.html", product=product, products=products)
+    return render_template("front/product-detail.html", product=product_dict, images=images, products=products)
