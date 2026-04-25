@@ -211,6 +211,24 @@
             .section-header h2 {
                 font-size: 2.2rem;
             }
+            .premium-card-body {
+                padding: 12px;
+            }
+            .card-product-title {
+                font-size: 0.9rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100px;
+            }
+            .card-product-price {
+                font-size: 1rem;
+            }
+            .btn-add-mini {
+                width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
+            }
         }
 
         .section-header {
@@ -310,9 +328,9 @@
                     <h2>Styleless Selects</h2>
                 </div>
                 
-                <div class="row">
+                <div class="row g-3">
                     {% for product in products %}
-                    <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="col-lg-3 col-md-4 col-6">
                         <div class="premium-card">
                             <div class="card-img-box">
                                 <a href="{{ url_for('detail', id=product.id) }}">
