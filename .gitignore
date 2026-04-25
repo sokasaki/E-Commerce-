@@ -15,9 +15,9 @@ env/
 ENV/
 
 # Flask
-instance/
-*.sqlite
-*.db
+# instance/
+# *.sqlite
+# *.db
 *.log
 
 # Uploads (ignore user uploads)
