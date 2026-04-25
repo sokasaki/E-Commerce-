@@ -4,7 +4,11 @@ import subprocess
 import json
 import requests
 
+import time
+
 class KHQRService:
+    _demo_timers = {}
+
     def __init__(self):
         self.token = os.getenv("BAKONG_API_TOKEN", "").strip()
         # No longer using the Python bakong_khqr library directly for QR generation
@@ -75,6 +79,26 @@ class KHQRService:
             # Debug log to terminal
             print(f"DEBUG: Bakong API check response for MD5 {md5}: {payload}")
         except ValueError:
+            # --- RENDER DEMO BYPASS ---
+            if os.getenv("RENDER"):
+                if md5 not in KHQRService._demo_timers:
+                    KHQRService._demo_timers[md5] = time.time()
+                
+                elapsed = time.time() - KHQRService._demo_timers[md5]
+                if elapsed > 12:
+                    print(f"DEBUG: Render Demo Mode - Auto-approving MD5 {md5}")
+                    return {
+                        "responseCode": 0,
+                        "responseMessage": "Success (Render Demo Bypass)",
+                        "data": {"status": "SUCCESS"}
+                    }
+                else:
+                    return {
+                        "responseCode": 1,
+                        "message": f"Demo Mode: Auto-approving in {int(12 - elapsed)} seconds..."
+                    }
+            # --------------------------
+            
             payload = {
                 "responseCode": response.status_code,
                 "message": "Bakong API returned a non-JSON response.",
