@@ -33,8 +33,18 @@
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <h2 class="fw-bold mb-0">Order #{{ order.id }}</h2>
-                    <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill text-uppercase" style="font-size: 0.7rem;">Paid</span>
-                    <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 rounded-pill text-uppercase" style="font-size: 0.7rem;">{{ order.status }}</span>
+                    <span class="badge px-3 py-2 rounded-pill text-uppercase border
+                        {% if order.status == 'paid' %}
+                            bg-success-subtle text-success border-success
+                        {% elif order.status == 'pending' %}
+                            bg-warning-subtle text-warning border-warning
+                        {% elif order.status == 'cancelled' %}
+                            bg-danger-subtle text-danger border-danger
+                        {% else %}
+                            bg-secondary-subtle text-secondary border-secondary
+                        {% endif %}" style="font-size: 0.7rem;">
+                        {{ order.status }}
+                    </span>
                     <div class="ms-auto text-muted small">
                         <i class="far fa-calendar me-1"></i> {{ order.created_at.strftime('%m.%d.%Y at %I:%M %p') }}
                     </div>
@@ -63,10 +73,16 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center gap-3">
-                                                    <img src="{{ item.product.image or url_for('static', filename='final_project/banner-1.jpg') }}" class="product-img-mini">
+                                                    <img src="{{ item.product.to_dict().image if item.product and item.product.to_dict().image else url_for('static', filename='uploads/no_img.jpg') }}" class="product-img-mini">
                                                     <div>
-                                                        <div class="fw-bold text-dark">{{ item.product.name }}</div>
-                                                        <small class="text-muted">ID: {{ item.product.id }}</small>
+                                                        <div class="fw-bold text-dark">{{ item.product.name if item.product else 'Product unavailable' }}</div>
+                                                        <small class="text-muted">
+                                                            {% if item.product %}
+                                                                ID: {{ item.product.id }}
+                                                            {% else %}
+                                                                Product record missing
+                                                            {% endif %}
+                                                        </small>
                                                     </div>
                                                 </div>
                                             </td>
@@ -81,6 +97,28 @@
                         </div>
 
                         <!-- Summary Card -->
+                        <div class="detail-card p-4">
+                            <h5 class="section-title">Order Details</h5>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-6">
+                                    <div class="info-label">Order ID</div>
+                                    <div class="info-value">#{{ order.id }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-label">Items</div>
+                                    <div class="info-value">{{ order.items|length }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-label">Placed On</div>
+                                    <div class="info-value">{{ order.created_at.strftime('%B %d, %Y') }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-label">Placed At</div>
+                                    <div class="info-value">{{ order.created_at.strftime('%I:%M %p') }}</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="detail-card p-4">
                             <h5 class="section-title">Payment Summary</h5>
                             <div class="d-flex justify-content-between mb-2">
@@ -145,6 +183,12 @@
                                 <p class="info-label">Contact Info</p>
                                 <div class="d-flex align-items-center gap-2 mb-2">
                                     <i class="far fa-envelope text-muted"></i>
+                                    <span class="info-value">
+                                        {{ order.user.customer_profile.email if order.user.customer_profile and order.user.customer_profile.email else 'N/A' }}
+                                    </span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="far fa-user text-muted"></i>
                                     <span class="info-value">{{ order.user.username }}</span>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
@@ -157,7 +201,8 @@
                                 <p class="info-label">Shipping Address</p>
                                 <div class="info-value fw-normal text-muted">
                                     {% if order.user.customer_profile and order.user.customer_profile.address %}
-                                        {{ order.user.customer_profile.address }}
+                                        {{ order.user.customer_profile.address }}<br>
+                                        {{ order.user.customer_profile.city or '' }}{% if order.user.customer_profile.city and order.user.customer_profile.country %}, {% endif %}{{ order.user.customer_profile.country or '' }} {{ order.user.customer_profile.zip_code or '' }}
                                     {% else %}
                                         <span class="fst-italic">No address provided</span>
                                     {% endif %}

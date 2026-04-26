@@ -402,14 +402,24 @@
                             window.location.href = data.redirect || "{{ url_for('profile') }}";
                         }, 2000);
                     } else {
-                        alert(data.error || 'Checkout failed. Please check your details.');
+                        Swal.fire({
+                            title: 'Checkout Failed',
+                            text: data.error || 'Please check your details.',
+                            icon: 'error',
+                            confirmButtonColor: '#111111'
+                        });
                         submitBtn.disabled = false;
                         submitBtn.innerText = originalText;
                     }
                 })
                 .catch(err => {
                     console.error('Checkout Error:', err);
-                    alert('An error occurred during checkout.');
+                    Swal.fire({
+                        title: 'Checkout Error',
+                        text: 'An error occurred during checkout.',
+                        icon: 'error',
+                        confirmButtonColor: '#111111'
+                    });
                     submitBtn.disabled = false;
                     submitBtn.innerText = originalText;
                 });

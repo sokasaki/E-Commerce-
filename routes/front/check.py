@@ -158,7 +158,7 @@ def check():
         session.pop('bakong_qr_md5', None)
         
         # Determine redirection based on payment method
-        redirect_url = url_for('profile')
+        redirect_url = url_for('order_confirmation', order_id=order.id)
         
         # Real-time notification for admins
         from routes.front.notifications import send_notification_to_all_admins
@@ -181,3 +181,13 @@ def check():
         return redirect(redirect_url)
         
     return render_template("front/check-out.html", cart_items=cart_items, total=total, customer=customer)
+
+
+@app.route('/order-confirmation/<int:order_id>')
+def order_confirmation(order_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login'))
+        
+    order = Order.query.filter_by(id=order_id, user_id=user_id).first_or_404()
+    return render_template("front/order-confirmation.html", order=order)

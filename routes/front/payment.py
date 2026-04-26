@@ -85,7 +85,7 @@ def confirm_payment(order_id):
         if request.is_json:
             return jsonify({"status": "success", "message": message})
         flash(message, "success")
-        return redirect(url_for('profile'))
+        return redirect(url_for('order_confirmation', order_id=order.id))
 
     payload = request.get_json(silent=True) if request.is_json else request.form
     md5 = (payload.get('md5') or '').strip() if payload else ''
@@ -119,4 +119,4 @@ def confirm_payment(order_id):
     if request.is_json:
         return jsonify({"status": "success", "message": message})
     flash(message, "success")
-    return redirect(url_for('profile'))
+    return redirect(url_for('order_confirmation', order_id=order.id))

@@ -5,6 +5,18 @@
 
 const { createApp, ref, computed, onMounted, reactive } = Vue;
 
+function showAlert(message, title = 'Notice', icon = 'info') {
+    if (window.Swal) {
+        return Swal.fire({
+            title,
+            text: message,
+            icon,
+            confirmButtonColor: '#111111'
+        });
+    }
+    alert(message);
+}
+
 // 1. Shared Reactive State (accessible by both Vue and Global functions)
 const cartState = reactive({
     items: [],
@@ -43,7 +55,7 @@ const cartState = reactive({
             
             if (response.status === 401) {
                 if (window.notify) window.notify('Please log in to add items.', 'Access Denied', 'warning');
-                else alert('Please log in to add items.');
+                else showAlert('Please log in to add items.', 'Access Denied', 'warning');
                 setTimeout(() => window.location.href = '/login', 1500);
                 return;
             }
